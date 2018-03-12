@@ -1,0 +1,20 @@
+{
+  "name": "tiny-game-engine",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "set -e;files=`ls test/*.mjs`;for file in $files; do node --experimental-modules --no-warnings $file | tap --reporter=dot -; done"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "canvas-prebuilt": "^1.6.5-prerelease.1",
+    "jsdom": "^11.6.2",
+    "tap": "^11.1.1",
+    "testdouble": "^3.5.2"
+  },
+  "dependencies": {
+    "matrix-class": "^1.0.0"
+  }
+}
