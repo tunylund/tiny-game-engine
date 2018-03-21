@@ -47,7 +47,7 @@ tap.test('should apply gravity', test => {
 tap.test('should be at', test => {
   const pos = position()
   test.ok(pos.isAt(xyz(0, 0, 0)))
-  test.ok(pos.isAt(xyz(1, 1, 1), 1))
-  test.notOk(pos.isAt(xyz(1, 1, 1)))
+  test.ok(pos.isAt(xyz(1, 1, 1), 2))
+  test.notOk(pos.isAt(xyz(1, 1, 1), 1))
   test.end()
 })
