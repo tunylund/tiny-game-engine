@@ -6,15 +6,15 @@
   "scripts": {
     "test": "set -e;files=`ls test/*.mjs`;for file in $files; do node --experimental-modules --no-warnings $file | tap --reporter=dot -; done"
   },
-  "author": "",
-  "license": "ISC",
+  "files": [
+    "lib"
+  ],
+  "author": "Tuomas Nylund",
+  "license": "MIT",
   "devDependencies": {
     "canvas-prebuilt": "^1.6.5-prerelease.1",
     "jsdom": "^11.6.2",
     "tap": "^11.1.1",
     "testdouble": "^3.5.2"
-  },
-  "dependencies": {
-    "matrix-class": "^1.0.0"
   }
 }
