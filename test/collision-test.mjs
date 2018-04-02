@@ -90,3 +90,12 @@ tap.test('bump should fix pos and vel to the opposite direction of vel in output
   ), position(1.5, 1.5, 2, 1, 1, -0))
   test.end()
 })
+
+tap.test('bump should fix pos assuming position is the center of the object', test => {
+  test.deepEqual(bump(
+    {pos: position(-1, -1, 0, 1, 0, 0), dim: dimension(1, 1, 1)},
+    [{pos: position(0, 0, 0), dim: dimension(10, 10, 1)}],
+    'x'
+  ), position(-5.5, -1, 0, 0, 0, 0))
+  test.end()
+})

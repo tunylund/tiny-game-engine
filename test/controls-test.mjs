@@ -17,6 +17,12 @@ function touch (pageX, pageY, fn) {
   window.document.body.dispatchEvent(new window.TouchEvent('touchend', {changedTouches: [{pageX, pageY}]}))
 }
 
+function mouse (clientX, clientY, fn) {
+  window.document.body.dispatchEvent(new window.MouseEvent('mousemove', {clientX, clientY}))
+  fn()
+  window.document.body.dispatchEvent(new window.MouseEvent('mousemove', {clientX, clientY}))
+}
+
 tap.test('controls', tests => {
   const controls = new Controls(window)
   tap.notOk(controls.left)
@@ -150,6 +156,56 @@ tap.test('touch', tests => {
   tests.test('↙', t => {
     touch(w2 - 1, h2 + 1, () => t.ok(controls.downleft && controls.leftdown))
     t.notOk(controls.downleft && controls.leftdown)
+    t.end()
+  })
+
+  controls.detach()
+  tests.end()
+})
+
+tap.test('mouse', tests => {
+  const controls = new Controls(window, true)
+  const w2 = window.innerWidth / 2,
+        h2 = window.innerHeight / 2
+
+  tests.test('←', t => {
+    mouse(w2 - 1, h2, () => t.ok(controls.left))
+    t.end()
+  })
+
+  tests.test('↖︎', t => {
+    mouse(w2 - 1, h2 - 1, () => t.ok(controls.leftup && controls.upleft))
+    t.end()
+  })
+
+  tests.test('↑', t => {
+    mouse(w2, h2 - 1, () => t.ok(controls.up))
+    t.end()
+  })
+
+  tests.test('↗', t => {
+    mouse(w2 + 1, h2 - 1, () => t.ok(controls.upright && controls.rightup))
+    t.end()
+  })
+
+  tests.test('→', t => {
+    mouse(w2 + 1, h2, () => t.ok(controls.right))
+    t.end()
+  })
+
+  tests.test('↘', t => {
+    mouse(w2 + 1, h2 + 1, () => t.ok(controls.rightdown && controls.downright))
+    t.end()
+  })
+
+  tests.test('↓', t => {
+    mouse(w2, h2 + 1, () => t.ok(controls.down))
+    t.end()
+  })
+
+  
+  tests.test('↙', t => {
+    mouse(w2 - 1, h2 + 1, () => t.ok(controls.downleft && controls.leftdown))
     t.end()
   })
 
