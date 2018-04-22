@@ -1,4 +1,4 @@
-import { setup, drawing } from './../lib/draw.mjs'
+import { drawing, draw, isometricDraw, stopDrawLoop } from './../lib/draw.mjs'
 import jsdom from 'jsdom'
 import tap from 'tap'
 import td from 'testdouble'
@@ -9,11 +9,11 @@ function prepare () {
   const { window } = (new jsdom.JSDOM(``, { pretendToBeVisual: true }))
   window.innerWidth = 100
   window.innerHeight = 100
-  return { ...setup(window), window }
+  return window
 }
 
 tap.test('should resize with window', test => {
-  const { draw, window, stopDrawLoop } = prepare()
+  const window = prepare()
   window.innerHeight = 50
   window.dispatchEvent(new window.Event('resize'))
   draw((ctx, cw, ch) => {
@@ -22,53 +22,53 @@ tap.test('should resize with window', test => {
     test.equal(cw, 50)
     test.equal(ch, 25)
     test.end()
-  }, position(), xyz())
+  }, position(), xyz(), window)
 })
 
 tap.test('should draw in a loop', test => {
-  const { draw, window, stopDrawLoop } = prepare()
+  const window = prepare()
   let drawCount = 0
   draw(() => {
     draw((ctx, cw, ch) => {
       stopDrawLoop()
       test.end()
-    }, position(), xyz())
-  }, position(), xyz())
+    }, position(), xyz(), window)
+  }, position(), xyz(), window)
 })
 
 tap.test('should organize drawing by their z index', test => {
-  const { draw, window, stopDrawLoop } = prepare()
+  const window = prepare()
   let drawOrder = []
-  draw(() => drawOrder.push(0), position(0, 0, 0), xyz())
-  draw(() => drawOrder.push(-1), position(0, 0, -1), xyz())
-  draw(() => drawOrder.push(1), position(0, 0, 0), xyz())
+  draw(() => drawOrder.push(0), position(0, 0, 0), xyz(), window)
+  draw(() => drawOrder.push(-1), position(0, 0, -1), xyz(), window)
+  draw(() => drawOrder.push(1), position(0, 0, 0), xyz(), window)
   draw(() => {
     stopDrawLoop()
     test.deepEqual(drawOrder, [-1, 0, 1])
     test.end()
-  }, position(0, 0, 0), xyz())
+  }, position(0, 0, 0), xyz(), window)
 })
 
 tap.test('should provide fn api', test => {
-  const { draw, isometricDraw, stopDrawLoop } = prepare()
+  const window = prepare()
   draw((ctx, cw, ch) => {
     isometricDraw((ctx, cw, ch) => {
       stopDrawLoop()
       test.ok(ctx)
       test.end()
-    }, position(), xyz())
-  }, position(), xyz())
+    }, position(), xyz(), window)
+  }, position(), xyz(), window)
 })
 
 tap.test('should provide an api for drawing an element on position', test => {
-  const { draw, isometricDraw, stopDrawLoop, window } = prepare()
+  const window = prepare()
   const img = drawing(20, 20, ctx => {}, window)
-  draw(img, { cor: { x: 0, y: 0, z: 0 } }, { x: 1, y: 1, z: 1 }, position(), xyz())
-  isometricDraw(img, { cor: { x: 0, y: 0, z: 0 }}, { x: 1, y: 1, z: 1 }, position(), xyz())
+  draw(img, { cor: { x: 0, y: 0, z: 0 } }, { x: 1, y: 1, z: 1 }, window)
+  isometricDraw(img, { cor: { x: 0, y: 0, z: 0 }}, { x: 1, y: 1, z: 1 }, window)
   draw(() => {
     stopDrawLoop()
     test.end()
-  }, position(), xyz())
+  }, position(), xyz(), window)
 })
 
 tap.test('should provide an api for drawing on a canvas', test => {
