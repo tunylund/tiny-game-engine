@@ -29,7 +29,7 @@ tap.test('controls', tests => {
   tap.notOk(controls.up)
   tap.notOk(controls.right)
   tap.notOk(controls.down)
-  
+
   tests.test('←', t => {
     key(['ArrowLeft'], () => {
       t.ok(controls.left)
@@ -99,6 +99,16 @@ tap.test('controls', tests => {
       t.deepEqual(controls.dir, xyz(-0.7071, -0.7071, 0))
     })
     t.notOk(controls.downleft && controls.leftdown)
+    t.end()
+  })
+
+  tests.test('x', t => {
+    key(['x', 'space'], () => {
+      t.ok(controls.x)
+      t.ok(controls.space)
+    })
+    t.notOk(controls.x)
+    t.notOk(controls.space)
     t.end()
   })
 
@@ -203,7 +213,6 @@ tap.test('mouse', tests => {
     t.end()
   })
 
-  
   tests.test('↙', t => {
     mouse(w2 - 1, h2 + 1, () => t.ok(controls.downleft && controls.leftdown))
     t.end()
