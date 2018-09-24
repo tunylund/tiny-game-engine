@@ -43,11 +43,3 @@ tap.test('should apply gravity', test => {
   test.deepEqual(nextPos.acc, xyz(1, 1, -980))
   test.end()
 })
-
-tap.test('should be at', test => {
-  const pos = position()
-  test.ok(pos.isAt(xyz(0, 0, 0)))
-  test.ok(pos.isAt(xyz(1, 1, 1), 2))
-  test.notOk(pos.isAt(xyz(1, 1, 1), 1))
-  test.end()
-})

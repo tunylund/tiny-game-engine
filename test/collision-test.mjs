@@ -1,6 +1,7 @@
 import tap from 'tap'
 import { intersects, bump } from './../lib/collision.mjs'
 import { position, dimension } from './../lib/position.mjs'
+import { el } from './../lib/el.mjs'
 
 // tap.test('should provide closest position upon collision', test => {
 //   const pos = position(0.25, 0.25, 0.25, 1, 1, 1)
@@ -26,40 +27,40 @@ import { position, dimension } from './../lib/position.mjs'
 
 tap.test('should not intersect', test => {
   test.notOk(intersects(
-    position(0, 0, 0),
-    dimension(1, 1, 1),
-    position(1, 1, 1),
-    dimension(1, 1, 1)
+    el(position(0, 0, 0),
+      dimension(1, 1, 1)),
+    el(position(1, 1, 1),
+      dimension(1, 1, 1))
   ))
   test.end()
 })
 
 tap.test('should not intersect if some dimension does not collide', test => {
   test.notOk(intersects(
-    position(0, 0.5, 0.5),
-    dimension(1, 1, 1),
-    position(1, 1, 1),
-    dimension(1, 1, 1)
+    el(position(0, 0.5, 0.5),
+      dimension(1, 1, 1)),
+    el(position(1, 1, 1),
+      dimension(1, 1, 1))
   ))
   test.end()
 })
 
 tap.test('should intersect if partly collides', test => {
   test.ok(intersects(
-    position(0.5, 0.5, 0.5),
-    dimension(1, 1, 1),
-    position(1, 1, 1),
-    dimension(1, 1, 1)
+    el(position(0.5, 0.5, 0.5),
+      dimension(1, 1, 1)),
+    el(position(1, 1, 1),
+      dimension(1, 1, 1))
   ))
   test.end()
 })
 
 tap.test('should intersect if entirely collides', test => {
   test.ok(intersects(
-    position(1, 1, 1),
-    dimension(1, 1, 1),
-    position(1, 1, 1),
-    dimension(1, 1, 1)
+    el(position(1, 1, 1),
+      dimension(1, 1, 1)),
+    el(position(1, 1, 1),
+      dimension(1, 1, 1))
   ))
   test.end()
 })

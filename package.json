@@ -4,7 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "set -e;files=`ls test/*.mjs`;for file in $files; do node --experimental-modules --no-warnings $file | tap --reporter=dot -; done"
+    "rename-modules": "for f in `find lib -name '*.js'`; do echo \"fixing filename on $f\" && mv $f `echo $f | sed -e 's/\\.js/\\.mjs/'`; done;",
+    "rename-imports": "for f in `find lib -name '*.js'`; do echo \"fixing imports on $f\" && sed -i '' -e \"s/from '\\(.*\\)'/from '\\1.mjs'/g\" $f; done;",
+    "build": "echo '\nbuilding...' && tsc && npm run rename-imports && npm run rename-modules && npm run lint",
+    "lint": "echo \"linting...\" && tslint --fix -p .",
+    "test": "set -e; npm run build; files=`ls test/*.mjs`; for file in $files; do node --experimental-modules --no-warnings $file | tap --reporter=dot -; done"
   },
   "files": [
     "lib"
@@ -15,6 +19,8 @@
     "canvas-prebuilt": "^1.6.5-prerelease.1",
     "jsdom": "^11.6.2",
     "tap": "^11.1.1",
-    "testdouble": "^3.5.2"
+    "testdouble": "^3.5.2",
+    "tslint": "^5.11.0",
+    "typescript": "^3.0.1"
   }
 }

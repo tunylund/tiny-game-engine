@@ -5,6 +5,8 @@ import td from 'testdouble'
 import { position } from './../lib/position.mjs'
 import { xyz } from './../lib/xyz.mjs'
 
+return
+
 function prepare () {
   const { window } = (new jsdom.JSDOM(``, { pretendToBeVisual: true }))
   window.innerWidth = 100
