@@ -1,6 +1,42 @@
-import { El } from './El'
+import { El, vectorTo } from './El'
 import { position } from './position'
 import { xyz, XYZ } from './xyz'
+
+// glory to https://github.com/pgkelley4/line-segments-intersect/blob/master/js/line-segments-intersect.js
+export function segmentIntersects(a1: XYZ, a2: XYZ, b1: XYZ, b2: XYZ) {
+  const r = a2.sub(a1)
+  const s = b2.sub(b1)
+  const uNumerator = b1.sub(a1).cross(r).z
+  const denominator = r.cross(s).z
+
+  // co-linear
+  if (uNumerator === 0 && denominator === 0) {
+    if (a1.equal(b1) || a1.equal(b2) || a2.equal(b1) || a2.equal(b2)) {
+      return true
+    }
+    return  !((b1.x - a1.x < 0) ===
+              (b1.x - a2.x < 0) ===
+              (b2.x - a1.x < 0) ===
+              (b2.x - a2.x < 0)) ||
+            !((b1.y - a1.y < 0) ===
+              (b1.y - a2.y < 0) ===
+              (b2.y - a1.y < 0) ===
+              (b2.y - a2.y < 0)) ||
+            !((b1.z - a1.z < 0) ===
+              (b1.z - a2.z < 0) ===
+              (b2.z - a1.z < 0) ===
+              (b2.z - a2.z < 0))
+  }
+
+  // parallel
+  if (denominator === 0) {
+    return false
+  }
+
+  const u = uNumerator / denominator
+  const t = b1.sub(a1).cross(s).z / denominator
+  return (t >= 0) && (t <= 1) && (u >= 0) && (u <= 1)
+}
 
 export function intersects(a: El, b: El) {
   if (a.dim.sum() === 0) { return false }

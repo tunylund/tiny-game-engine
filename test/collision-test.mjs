@@ -1,7 +1,8 @@
 import tap from 'tap'
-import { intersects, bump } from './../lib/collision.mjs'
+import { segmentIntersects, intersects, bump } from './../lib/collision.mjs'
 import { position, dimension } from './../lib/position.mjs'
 import { el } from './../lib/el.mjs'
+import { xyz } from './../lib/xyz.mjs'
 
 // tap.test('should provide closest position upon collision', test => {
 //   const pos = position(0.25, 0.25, 0.25, 1, 1, 1)
@@ -24,6 +25,19 @@ import { el } from './../lib/el.mjs'
 //   test.deepEqual(suggestion, position(0, 0, 0, 1, 1, 1, 0, 0, 0))
 //   test.end()
 // })
+
+tap.test('should not intersect', test => {
+  test.notOk(segmentIntersects(xyz(), xyz(1), xyz(2), xyz(3)))
+  test.notOk(segmentIntersects(xyz(), xyz(1), xyz(0, 1), xyz(1, 1)))
+  test.end()
+})
+
+tap.test('should intersect', test => {
+  test.ok(segmentIntersects(xyz(), xyz(2), xyz(1), xyz(3)))
+  test.ok(segmentIntersects(xyz(), xyz(1), xyz(), xyz(0, 1)))
+  test.ok(segmentIntersects(xyz(), xyz(1), xyz(), xyz(0, 1)))
+  test.end()
+})
 
 tap.test('should not intersect', test => {
   test.notOk(intersects(

@@ -40,11 +40,16 @@ class XYZ {
 
   get size() { return Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z) }
 
+  public cross(v: XYZ) {
+    return xyz(this.y * v.z - this.z * v.y, this.x * v.z - this.z * v.x, this.x * v.y - this.y * v.x)
+  }
+  public dot(v: XYZ) { return this.mul(v).sum() }
   public add(v: XYZ) { return xyz(this.x + v.x, this.y + v.y, this.z + v.z) }
   public sub(v: XYZ) { return xyz(this.x - v.x, this.y - v.y, this.z - v.z) }
   public mul(v: XYZ) { return xyz(this.x * v.x, this.y * v.y, this.z * v.z) }
   public div(v: XYZ) { return xyz(this.x / v.x, this.y / v.y, this.z / v.z) }
   public sum() { return Math.abs(this.x) + Math.abs(this.y) + Math.abs(this.z) }
+  public equal(v: XYZ) { return this.x === v.x && this.y === v.y && this.z === v.z }
 }
 
 /**
