@@ -96,25 +96,32 @@ export function gridTileCenterAt(grid: Grid, matrixCor: XYZ): XYZ {
     .mul(xyz(1, 1, 0)))
 }
 
-export function assignOnGrid(grid: Grid, cor: XYZ, value: number, dim?: XYZ): Grid {
+function _assignOnGrid(grid: Grid, cor: XYZ, value: number, dim?: XYZ): Grid {
   if (dim) {
     const min = cor.sub(dim.mul(half)),
           max = cor.add(dim.mul(half))
     for (let x = cor.x; x > min.x; x -= grid.tileSize.x) {
-      for (let y = cor.y; y > min.y; y -= grid.tileSize.y) { grid = assignOnGrid(grid, xyz(x, y), value) }
-      for (let y = cor.y; y < max.y; y += grid.tileSize.y) { grid = assignOnGrid(grid, xyz(x, y), value) }
+      for (let y = cor.y; y > min.y; y -= grid.tileSize.y) { grid = _assignOnGrid(grid, xyz(x, y), value) }
+      for (let y = cor.y; y < max.y; y += grid.tileSize.y) { grid = _assignOnGrid(grid, xyz(x, y), value) }
     }
     for (let x = cor.x; x < max.x; x += grid.tileSize.x) {
-      for (let y = cor.y; y > min.y; y -= grid.tileSize.y) { grid = assignOnGrid(grid, xyz(x, y), value) }
-      for (let y = cor.y; y < max.y; y += grid.tileSize.y) { grid = assignOnGrid(grid, xyz(x, y), value) }
+      for (let y = cor.y; y > min.y; y -= grid.tileSize.y) { grid = _assignOnGrid(grid, xyz(x, y), value) }
+      for (let y = cor.y; y < max.y; y += grid.tileSize.y) { grid = _assignOnGrid(grid, xyz(x, y), value) }
     }
     return grid
   } else {
-    const c = gridMatrixCorAt(grid, cor), m = []
-    for (let i = 0; m.length < grid.matrix.length; i++) { m.push(grid.matrix[i].slice()) }
-    m[c.y][c.x] = value
-    return { ...grid, matrix: m }
+    const c = gridMatrixCorAt(grid, cor)
+    grid.matrix[c.y][c.x] = value
+    return grid
   }
+}
+
+export function assignOnGrid(grid: Grid, cor: XYZ, value: number, dim?: XYZ): Grid {
+  const matrixClone = []
+  for (let i = 0; matrixClone.length < grid.matrix.length; i++) {
+    matrixClone.push(grid.matrix[i].slice())
+  }
+  return _assignOnGrid({ ...grid, matrix: matrixClone }, cor, value, dim)
 }
 
 export function valueAtGrid(grid: Grid, cor: XYZ): number {
