@@ -1,7 +1,8 @@
+// @ts-ignore
 import tap from 'tap'
-import { timeBasedTurn, turnBasedTurn } from './../lib/turn.mjs'
+import { timeBasedTurn, turnBasedTurn } from './../src/turn'
 
-tap.test('time-based turn', test => {
+tap.test('time-based turn', (test: any) => {
   test.ok(timeBasedTurn('test', 10))
   test.notOk(timeBasedTurn('test', 10))
   setTimeout(() => {
@@ -10,7 +11,7 @@ tap.test('time-based turn', test => {
   }, 10)
 })
 
-tap.test('turn-based turn', test => {
+tap.test('turn-based turn', (test: any) => {
   test.ok(turnBasedTurn('a'))
   test.ok(turnBasedTurn('b'))
   test.notOk(turnBasedTurn('b'))

@@ -10,7 +10,11 @@
         "adjacent-overload-signatures": false,
         "semicolon": [true, "never"],
         "object-literal-sort-keys": false,
-        "quotemark": [true, "single", "avoid-escape", "avoid-template"]
+        "quotemark": [true, "single", "avoid-escape", "avoid-template"],
+        "curly": [false],
+        "ordered-imports": [false],
+        "no-empty": [false],
+        "arrow-parens": [false]
     },
     "rulesDirectory": []
 }

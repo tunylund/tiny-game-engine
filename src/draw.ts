@@ -9,14 +9,14 @@ type Draw = (ctx: CanvasRenderingContext2D, cw: number, ch: number) => void
 function setup(window: Window) {
   const layer = drawingLayer(window)
   window.document.body.appendChild(layer.canvas)
-
+  const i = 0
   const stopThisDrawLoop = loop((step, total) => {
     const iteration = drawables.splice(0, drawables.length)
     while (iteration.length > 0) {
       const drawable = iteration.shift()
       if (drawable) {
         const l = drawable.layer || layer
-        drawable.draw(l.context, l.cw, l.ch)
+        if (l.context) drawable.draw(l.context, l.cw, l.ch)
       }
     }
   }, window)
@@ -66,28 +66,30 @@ function drawing(w: number, h: number, fn: Drawing, win?: Window) {
 }
 
 function drawingLayer(win?: Window): Layer {
-  const canvas = (win || window).document.createElement('canvas')
+  const w = win || window
+  const canvas = w.document.createElement('canvas')
   const layer = {
     cw: 0, ch: 0, canvas,
     context: canvas.getContext('2d') as CanvasRenderingContext2D,
   }
   function onResize() {
-    canvas.width = window.innerWidth
-    canvas.height = window.innerHeight
+    canvas.width = w.innerWidth
+    canvas.height = w.innerHeight
     layer.cw = canvas.width / 2
     layer.ch = canvas.height / 2
   }
-  window.addEventListener('resize', onResize)
+  w.addEventListener('resize', onResize)
   onResize()
   return layer
 }
 
 function draw(
-  drawFn: Draw,
+  drawFn: Draw|Drawing,
   pos: Position = position(),
   layer?: Layer,
   win?: Window) {
   addDrawable(pos.cor.z, (context, cw, ch) => {
+    if (!context) throw new Error('no context')
     context.save()
     context.translate(cw, ch)
     drawFn(context, cw, ch)
@@ -101,7 +103,9 @@ function drawImage(
   pos: Position = position(),
   layer?: Layer,
   win?: Window) {
-  draw((ctx) => ctx.drawImage(img, pos.cor.x - img.width / 2, pos.cor.y - img.height / 2), pos, layer, win)
+  draw((ctx: CanvasRenderingContext2D) => {
+    ctx.drawImage(img, pos.cor.x - img.width / 2, pos.cor.y - img.height / 2)
+  }, pos, layer, win)
 }
 
 function isometricDraw(

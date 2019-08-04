@@ -2,7 +2,7 @@ const timeBasedTurns: { [index: string]: boolean } = {}
 export function timeBasedTurn(name: string, timing = 250) {
   if (!timeBasedTurns.hasOwnProperty(name) || timeBasedTurns[name]) {
     timeBasedTurns[name] = false
-    setTimeout((x) => timeBasedTurns[name] = true, timing)
+    setTimeout(() => timeBasedTurns[name] = true, timing)
     return true
   }
   return false

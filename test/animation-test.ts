@@ -1,6 +1,7 @@
-// import tap from 'tap'
-// import { valueOverTime, linear } from './../lib/animation.mjs'
-// import jsdom from 'jsdom'
+// @ts-ignore
+import tap from 'tap'
+import { valueOverTime, linear } from './../src/animation'
+import jsdom from 'jsdom'
 
 // const window = (new jsdom.JSDOM(``, { pretendToBeVisual: true })).window
 

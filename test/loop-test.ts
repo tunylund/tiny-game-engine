@@ -1,10 +1,11 @@
+// @ts-ignore
 import tap from 'tap'
-import loop from './../lib/loop.mjs'
+import loop from './../src/loop'
 import jsdom from 'jsdom'
 
-const window = (new jsdom.JSDOM(``, { pretendToBeVisual: true })).window
+const window = (new jsdom.JSDOM('', { pretendToBeVisual: true })).window
 
-tap.test('should loop', test => {
+tap.test('should loop', (test: any) => {
   const stop = loop((step, total) => {
     stop()
     test.ok(step > 0)

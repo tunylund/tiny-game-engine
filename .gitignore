@@ -15,3 +15,5 @@ typings/
 # dotenv environment variables file
 .env
 
+.build
+.vscode
