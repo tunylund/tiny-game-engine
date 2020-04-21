@@ -17,13 +17,12 @@
   "author": "Tuomas Nylund",
   "license": "MIT",
   "devDependencies": {
-    "@types/jsdom": "^12.2.4",
-    "canvas": "^2.5.0",
-    "canvas-prebuilt": "^2.0.0-alpha.14",
-    "jsdom": "^15.1.1",
-    "tap": "^14.5.0",
-    "testdouble": "^3.12.2",
-    "tslint": "^5.18.0",
-    "typescript": "^3.5.3"
+    "@types/jsdom": "^16.2.1",
+    "canvas": "^2.6.1",
+    "jsdom": "^16.2.2",
+    "tap": "^14.10.7",
+    "testdouble": "^3.13.1",
+    "tslint": "^6.1.1",
+    "typescript": "^3.8.0"
   }
 }

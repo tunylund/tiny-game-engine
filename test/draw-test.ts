@@ -5,16 +5,17 @@ import tap from 'tap'
 import { position } from './../src/position'
 
 function prepare() {
-  const { window } = (new jsdom.JSDOM('', { pretendToBeVisual: true }))
+  const { window } = new jsdom.JSDOM('', { pretendToBeVisual: true })
+  const domWindow = window as unknown as Window
   // @ts-ignore
   window.innerWidth = 100
   // @ts-ignore
   window.innerHeight = 100
-  return window
+  return {window, domWindow}
 }
 
 tap.test('should resize with window', (test: any) => {
-  const window = prepare()
+  const {window, domWindow} = prepare()
   // @ts-ignore
   window.innerHeight = 50
   window.dispatchEvent(new window.Event('resize'))
@@ -24,41 +25,41 @@ tap.test('should resize with window', (test: any) => {
     test.equal(cw, 50)
     test.equal(ch, 25)
     test.end()
-  }, position(), undefined, window)
+  }, position(), undefined, domWindow)
 })
 
 tap.test('should draw in a loop', (test: any) => {
-  const window = prepare()
+  const {domWindow} = prepare()
   draw(() => {
     draw((ctx, cw, ch) => {
       stopDrawLoop()
       test.end()
-    }, position(), undefined, window)
-  }, position(), undefined, window)
+    }, position(), undefined, domWindow)
+  }, position(), undefined, domWindow)
 })
 
 tap.test('should organize drawing by their z index', (test: any) => {
-  const window = prepare()
+  const {domWindow} = prepare()
   const drawOrder: number[] = []
-  draw(() => drawOrder.push(0), position(0, 0, 0), undefined, window)
-  draw(() => drawOrder.push(-1), position(0, 0, -1), undefined, window)
-  draw(() => drawOrder.push(1), position(0, 0, 0), undefined, window)
+  draw(() => drawOrder.push(0), position(0, 0, 0), undefined, domWindow)
+  draw(() => drawOrder.push(-1), position(0, 0, -1), undefined, domWindow)
+  draw(() => drawOrder.push(1), position(0, 0, 0), undefined, domWindow)
   draw(() => {
     stopDrawLoop()
     test.deepEqual(drawOrder, [-1, 0, 1])
     test.end()
-  }, position(0, 0, 0), undefined, window)
+  }, position(0, 0, 0), undefined, domWindow)
 })
 
 tap.test('should provide fn api', (test: any) => {
-  const window = prepare()
+  const {domWindow} = prepare()
   draw((ctx, cw, ch) => {
     isometricDraw((ictx: any) => {
       stopDrawLoop()
       test.ok(ictx)
       test.end()
-    }, position(), window)
-  }, position(), undefined, window)
+    }, position(), domWindow)
+  }, position(), undefined, domWindow)
 })
 
 // tap.test('should provide an api for drawing an element on position', (test: any) => {
@@ -72,7 +73,7 @@ tap.test('should provide fn api', (test: any) => {
 // })
 
 tap.test('should provide an api for drawing on a canvas', (test: any) => {
-  const cvs = drawing(20, 20, (ctx) => test.ok(ctx), new jsdom.JSDOM().window)
+  const cvs = drawing(20, 20, (ctx) => test.ok(ctx), new jsdom.JSDOM().window as unknown as Window)
   test.ok(cvs)
   test.equal(cvs.width, 20)
   test.equal(cvs.height, 20)

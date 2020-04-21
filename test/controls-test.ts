@@ -5,29 +5,31 @@ import tap from 'tap'
 import { xyz } from './../src/xyz'
 
 const { window } = (new jsdom.JSDOM('', { }))
+const { KeyboardEvent, TouchEvent, MouseEvent } = window
+const domWindow = window as unknown as Window
 
 function key(cs: string[], fn: () => void) {
-  cs.map(c => window.document.body.dispatchEvent(new window.KeyboardEvent('keydown', {code: c})))
+  cs.map(c => window.document.body.dispatchEvent(new KeyboardEvent('keydown', {code: c})))
   fn()
-  cs.map(c => window.document.body.dispatchEvent(new window.KeyboardEvent('keyup', {code: c})))
+  cs.map(c => window.document.body.dispatchEvent(new KeyboardEvent('keyup', {code: c})))
 }
 
 function touch(pageX: number, pageY: number, fn: () => void) {
   // @ts-ignore
-  window.document.body.dispatchEvent(new window.TouchEvent('touchstart', {changedTouches: [{pageX, pageY}]}))
+  window.document.body.dispatchEvent(new TouchEvent('touchstart', {changedTouches: [{pageX, pageY}]}))
   fn()
   // @ts-ignore
-  window.document.body.dispatchEvent(new window.TouchEvent('touchend', {changedTouches: [{pageX, pageY}]}))
+  window.document.body.dispatchEvent(new TouchEvent('touchend', {changedTouches: [{pageX, pageY}]}))
 }
 
 function mouse(clientX: number, clientY: number, fn: () => void) {
-  window.document.body.dispatchEvent(new window.MouseEvent('mousemove', {clientX, clientY}))
+  window.document.body.dispatchEvent(new MouseEvent('mousemove', {clientX, clientY}))
   fn()
-  window.document.body.dispatchEvent(new window.MouseEvent('mousemove', {clientX, clientY}))
+  window.document.body.dispatchEvent(new MouseEvent('mousemove', {clientX, clientY}))
 }
 
 tap.test('controls', (tests: any) => {
-  const controls = new Controls(window)
+  const controls = new Controls(domWindow)
   tap.notOk(controls.left)
   tap.notOk(controls.up)
   tap.notOk(controls.right)
@@ -128,7 +130,7 @@ tap.test('controls', (tests: any) => {
 })
 
 tap.test('touch', (tests: any) => {
-  const controls = new Controls(window)
+  const controls = new Controls(domWindow)
   const w2 = window.innerWidth / 2,
         h2 = window.innerHeight / 2
 
@@ -185,7 +187,7 @@ tap.test('touch', (tests: any) => {
 })
 
 tap.test('mouse', (tests: any) => {
-  const controls = new Controls(window, true)
+  const controls = new Controls(domWindow, true)
   const w2 = window.innerWidth / 2,
         h2 = window.innerHeight / 2
 
