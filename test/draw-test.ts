@@ -1,4 +1,4 @@
-import { drawing, draw, isometricDraw, stopDrawLoop } from './../src/draw'
+import { draw, isometricDraw, stopDrawLoop } from './../src/draw'
 import jsdom from 'jsdom'
 // @ts-ignore
 import tap from 'tap'
@@ -71,11 +71,3 @@ tap.test('should provide fn api', (test: any) => {
 //     stopDrawLoop()
 //   }, position(), xyz(), window)
 // })
-
-tap.test('should provide an api for drawing on a canvas', (test: any) => {
-  const cvs = drawing(20, 20, (ctx) => test.ok(ctx), new jsdom.JSDOM().window as unknown as Window)
-  test.ok(cvs)
-  test.equal(cvs.width, 20)
-  test.equal(cvs.height, 20)
-  test.end()
-})

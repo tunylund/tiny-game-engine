@@ -4,10 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "rename-modules": "for f in `find .build -name '*.js'`; do echo \"fixing filename on $f\" && mv $f `echo $f | sed -e 's/\\.js/\\.mjs/'`; done;",
-    "rename-imports": "for f in `find .build -name '*.js'`; do echo \"fixing imports on $f\" && sed -i '' -e \"s/from '\\.\\(.*\\)'/from '\\.\\1.mjs'/g\" $f; done;",
-    "build": "set -e; npm run compile; rm -rf lib/*; cp .build/src/*.mjs lib/; ",
-    "compile": "set -e; echo '\ncompiling...'; npm run lint; rm -rf .build; tsc; npm run rename-imports; npm run rename-modules;",
+    "rename-modules": "for f in `find .build -name '*.js'`; do echo \"fixing filename on $f\" && cp $f `echo $f | sed -e 's/\\.js/\\.mjs/'`; done;",
+    "rename-imports": "for f in `find .build -name '*.mjs'`; do echo \"fixing imports on $f\" && sed -i '' -e \"s/from '\\.\\(.*\\)'/from '\\.\\1.mjs'/g\" $f; done;",
+    "build": "set -e; npm run compile; rm -rf lib/*; cp .build/src/* lib/; ",
+    "compile": "set -e; echo '\ncompiling...'; npm run lint; rm -rf .build; tsc; npm run rename-modules; npm run rename-imports;",
     "lint": "echo \"linting...\" && tslint --fix -p .",
     "test": "set -e; npm run compile; files=`ls .build/test/*.mjs`; for file in $files; do node --experimental-modules --no-warnings $file | tap --reporter=dot -; done"
   },

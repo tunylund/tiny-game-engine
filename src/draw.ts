@@ -1,7 +1,5 @@
-import { El } from './el'
 import loop from './loop'
 import { Position, position } from './position'
-import { XYZ } from './xyz'
 
 type Drawing = (ctx: CanvasRenderingContext2D) => void
 type Draw = (ctx: CanvasRenderingContext2D, cw: number, ch: number) => void
@@ -55,14 +53,6 @@ function addDrawable(z: number, drawFn: Draw, win: Window, layer?: Layer) {
   let ix = drawables.length
   while (ix-- > 0) { if (drawables[ix].z <= z) { break } }
   drawables.splice(ix + 1, 0, { z, draw: drawFn, layer })
-}
-
-function drawing(w: number, h: number, fn: Drawing, win?: Window) {
-  const canvas = (win || window).document.createElement('canvas')
-  canvas.width = w
-  canvas.height = h
-  fn(canvas.getContext('2d') as CanvasRenderingContext2D)
-  return canvas
 }
 
 function drawingLayer(win?: Window): Layer {
@@ -119,4 +109,4 @@ function isometricDraw(
   }, pos, undefined, (win || window))
 }
 
-export { draw, drawImage, drawing, drawingLayer, isometricDraw, stopDrawLoop, Draw }
+export { draw, drawImage, drawingLayer, isometricDraw, stopDrawLoop, Draw }
