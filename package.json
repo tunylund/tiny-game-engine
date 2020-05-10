@@ -2,7 +2,6 @@
   "name": "tiny-game-engine",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
   "scripts": {
     "rename-modules": "for f in `find .build -name '*.js'`; do echo \"fixing filename on $f\" && cp $f `echo $f | sed -e 's/\\.js/\\.mjs/'`; done;",
     "rename-imports": "for f in `find .build -name '*.mjs'`; do echo \"fixing imports on $f\" && sed -i '' -e \"s/from '\\.\\(.*\\)'/from '\\.\\1.mjs'/g\" $f; done;",
@@ -11,9 +10,8 @@
     "lint": "echo \"linting...\" && tslint --fix -p .",
     "test": "set -e; npm run compile; files=`ls .build/test/*.mjs`; for file in $files; do node --experimental-modules --no-warnings $file | tap --reporter=dot -; done"
   },
-  "files": [
-    "lib"
-  ],
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
   "author": "Tuomas Nylund",
   "license": "MIT",
   "devDependencies": {
