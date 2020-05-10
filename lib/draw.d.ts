@@ -8,9 +8,8 @@ interface Layer {
     ch: number;
 }
 declare function stopDrawLoop(): void;
-declare function drawing(w: number, h: number, fn: Drawing, win?: Window): HTMLCanvasElement;
 declare function drawingLayer(win?: Window): Layer;
 declare function draw(drawFn: Draw | Drawing, pos?: Position, layer?: Layer, win?: Window): void;
 declare function drawImage(img: HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | ImageBitmap, pos?: Position, layer?: Layer, win?: Window): void;
 declare function isometricDraw(drawFn: Draw, pos: Position, win?: Window): void;
-export { draw, drawImage, drawing, drawingLayer, isometricDraw, stopDrawLoop, Draw };
+export { draw, drawImage, drawingLayer, isometricDraw, stopDrawLoop, Draw };
