@@ -17,3 +17,4 @@ typings/
 
 .build
 .vscode
+.nyc_output
