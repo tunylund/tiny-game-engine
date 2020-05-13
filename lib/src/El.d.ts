@@ -4,7 +4,7 @@ interface El {
     pos: Position;
     dim: XYZ;
 }
-declare function el(pos: El | Position, dim?: XYZ, rest?: object): El & object;
+declare function el<T extends El>(pos: El | Position, dim?: XYZ, rest?: object): T;
 declare function vectorTo(e: El, otherEl: El, size?: number): XYZ;
 declare function nearest<T extends El>(els: T[], cor: XYZ): T | null;
 declare function dist(a: El, b: El): number;

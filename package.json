@@ -1,11 +1,15 @@
 {
   "name": "tiny-game-engine",
   "version": "1.0.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tunylund/tiny-game-engine"
+  },
   "description": "",
   "scripts": {
     "build": "./build.sh",
     "lint": "echo \"linting...\" && tslint --fix -p .",
-    "test": "npm run build && tap lib/test/*.mjs"
+    "test": "jest"
   },
   "main": "./lib/src/index.mjs",
   "exports": "./lib/src/index.mjs",
@@ -14,12 +18,14 @@
   "author": "Tuomas Nylund",
   "license": "MIT",
   "devDependencies": {
+    "@types/jest": "^25.2.1",
     "@types/jsdom": "^16.2.1",
     "canvas": "^2.6.1",
+    "jest": "^26.0.1",
     "jsdom": "^16.2.2",
-    "tap": "^14.10.7",
-    "testdouble": "^3.13.1",
+    "ts-jest": "^25.5.1",
     "tslint": "^6.1.1",
     "typescript": "^3.8.0"
-  }
+  },
+  "dependencies": {}
 }

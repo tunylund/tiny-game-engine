@@ -1,17 +1,17 @@
-import { El, vectorTo } from './El'
+import { El } from './El'
 import { position } from './position'
-import { xyz, XYZ } from './xyz'
+import { xyz, XYZ, sub, cross, equal, mul, negone, one, add } from './xyz'
 
 // glory to https://github.com/pgkelley4/line-segments-intersect/blob/master/js/line-segments-intersect.js
 export function segmentIntersects(a1: XYZ, a2: XYZ, b1: XYZ, b2: XYZ) {
-  const r = a2.sub(a1)
-  const s = b2.sub(b1)
-  const uNumerator = b1.sub(a1).cross(r).z
-  const denominator = r.cross(s).z
+  const r = sub(a2, a1)
+  const s = sub(b2, b1)
+  const uNumerator = cross(sub(b1, a1), r).z
+  const denominator = cross(r, s).z
 
   // co-linear
   if (uNumerator === 0 && denominator === 0) {
-    if (a1.equal(b1) || a1.equal(b2) || a2.equal(b1) || a2.equal(b2)) {
+    if (equal(a1, b1) || equal(a1, b2) || equal(a2, b1) || equal(a2, b2)) {
       return true
     }
     return  !((b1.x - a1.x < 0) ===
@@ -34,13 +34,13 @@ export function segmentIntersects(a1: XYZ, a2: XYZ, b1: XYZ, b2: XYZ) {
   }
 
   const u = uNumerator / denominator
-  const t = b1.sub(a1).cross(s).z / denominator
+  const t = cross(sub(b1, a1), s).z / denominator
   return (t >= 0) && (t <= 1) && (u >= 0) && (u <= 1)
 }
 
 export function intersects(a: El, b: El) {
-  if (a.dim.sum() === 0) { return false }
-  if (b.dim.sum() === 0) { return false }
+  if (a.dim.sum === 0) { return false }
+  if (b.dim.sum === 0) { return false }
   return intersectsDir(a.pos.cor, a.dim, b.pos.cor, b.dim, 'x') &&
     intersectsDir(a.pos.cor, a.dim, b.pos.cor, b.dim, 'y') &&
     intersectsDir(a.pos.cor, a.dim, b.pos.cor, b.dim, 'z')
@@ -104,17 +104,20 @@ export function bump(otherEl: El, collidables: El[] = [], dir = 'z') {
     dir === 'z' ? 1 : 0,
   )
 
-  const correction = collidables
+  const sumOfIntersections = collidables
     .filter((c) => intersects(otherEl, c))
     .map((c) => overlap(otherEl, c, otherEl.pos.vel.signature))
-    .reduce((a, b) => a.sum() > b.sum() ? a : b, xyz())
-    .mul(otherEl.pos.vel.signature)
-    .mul(fixSelector)
+    .reduce((a, b) => a.sum > b.sum ? a : b, xyz())
+  const whatever = mul(sumOfIntersections, otherEl.pos.vel.signature)
+  const correction = mul(whatever, fixSelector)
 
-  if (correction.sum() === 0) { return otherEl.pos } else { return position(
-    otherEl.pos.cor.sub(correction),
-    otherEl.pos.vel.mul(fixSelector.mul(xyz(-1, -1, -1)).add(xyz(1, 1, 1))),
-    otherEl.pos.acc,
-  )
+  if (correction.sum === 0) {
+    return otherEl.pos
+  } else {
+    return position(
+      sub(otherEl.pos.cor, correction),
+      mul(otherEl.pos.vel, add(mul(fixSelector, negone), one)),
+      otherEl.pos.acc,
+    )
   }
 }

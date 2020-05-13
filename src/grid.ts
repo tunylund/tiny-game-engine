@@ -1,4 +1,4 @@
-import { half, negone, two, xyz, XYZ } from './xyz'
+import { half, negone, two, xyz, XYZ, mul, add, sub, div } from './xyz'
 
 export interface Grid {
   matrix: number[][],
@@ -26,7 +26,7 @@ export function buildGrid(tileSize: XYZ, containerDim: XYZ, ensureUnEven = false
     tileSize.x === 0 ? 0 : Math.floor(containerDim.x / tileSize.x),
     tileSize.y === 0 ? 0 : Math.floor(containerDim.y / tileSize.y),
     tileSize.z === 0 ? 0 : Math.floor(containerDim.z / tileSize.z))
-  const dim2 = dim.mul(half)
+  const dim2 = mul(dim, half)
   const matrix = []
 
   for (let y = 0; y < dim.y; y++) {
@@ -37,9 +37,9 @@ export function buildGrid(tileSize: XYZ, containerDim: XYZ, ensureUnEven = false
   }
 
   return { dim, dim2, matrix, tileSize,
-    tileSize2: tileSize.mul(half),
-    minXYZ: dim2.mul(negone).mul(tileSize),
-    maxXYZ: dim2.mul(tileSize),
+    tileSize2: mul(tileSize, half),
+    minXYZ: mul(mul(dim2, negone), tileSize),
+    maxXYZ: mul(dim2, tileSize),
   }
 }
 
@@ -63,8 +63,8 @@ function limitXYZ(v: XYZ, min: XYZ, max: XYZ) {
 
 export function snapToGridTileCenter(grid: Grid, cor: XYZ): XYZ {
   const c = limitXYZ(cor,
-    grid.minXYZ.add(grid.tileSize2),
-    grid.maxXYZ.sub(grid.tileSize2))
+    add(grid.minXYZ, grid.tileSize2),
+    sub(grid.maxXYZ, grid.tileSize2))
   return xyz(
     snap(c.x, grid.tileSize.x, grid.dim.x > 0 && grid.dim.x % 2 === 0 ? grid.tileSize.x2 : 0),
     snap(c.y, grid.tileSize.y, grid.dim.y > 0 && grid.dim.y % 2 === 0 ? grid.tileSize.y2 : 0),
@@ -82,24 +82,18 @@ export function snapToGridCrossSection(grid: Grid, cor: XYZ): XYZ {
 }
 
 export function gridMatrixCorAt(grid: Grid, cor: XYZ): XYZ {
-  return snapToGridTileCenter(grid, cor)
-    .sub(grid.tileSize2)
-    .div(grid.tileSize)
-    .add(grid.dim2)
+  return add(div(sub(snapToGridTileCenter(grid, cor), grid.tileSize2), grid.tileSize), grid.dim2)
 }
 
 export function gridTileCenterAt(grid: Grid, matrixCor: XYZ): XYZ {
-  return snapToGridTileCenter(grid, matrixCor
-    .mul(grid.tileSize)
-    .add(grid.tileSize2)
-    .sub(grid.dim2.mul(grid.tileSize))
-    .mul(xyz(1, 1, 0)))
+  const cor = mul(sub(add(mul(matrixCor, grid.tileSize), grid.tileSize2), mul(grid.dim2, grid.tileSize)), xyz(1, 1, 0))
+  return snapToGridTileCenter(grid, cor)
 }
 
 function _assignOnGrid(grid: Grid, cor: XYZ, value: number, dim?: XYZ): Grid {
   if (dim) {
-    const min = cor.sub(dim.mul(half)),
-          max = cor.add(dim.mul(half))
+    const min = sub(cor, mul(dim, half)),
+          max = add(cor, mul(dim, half))
     for (let x = cor.x; x > min.x; x -= grid.tileSize.x) {
       for (let y = cor.y; y > min.y; y -= grid.tileSize.y) { grid = _assignOnGrid(grid, xyz(x, y), value) }
       for (let y = cor.y; y < max.y; y += grid.tileSize.y) { grid = _assignOnGrid(grid, xyz(x, y), value) }
@@ -134,16 +128,16 @@ export function gridStep(grid: Grid, fn: (cor: XYZ, i?: number) => any) {
   const max = grid.maxXYZ
   for (let i = min, j = 0;
     i.y < max.y || i.x < max.x || i.z < max.z;
-    i = i.add(grid.tileSize),
+    i = add(i, grid.tileSize),
     j = j + 1) {
     fn(i, j)
   }
 }
 
 function gridCors(grid: Grid, min: XYZ, max: XYZ): XYZ[] {
-  const step = max.sub(min).div(grid.tileSize)
+  const step = div(sub(max, min), grid.tileSize)
   return range(step.x)
-    .map((x) => range(step.y).map((y) => xyz(x, y).mul(grid.tileSize).add(min)))
+    .map((x) => range(step.y).map((y) => add(mul(xyz(x, y), grid.tileSize), min)))
     .reduce((result, col) => result.concat(col), [])
 }
 
