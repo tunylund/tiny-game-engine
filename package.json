@@ -11,13 +11,13 @@
     "lint": "echo \"linting...\" && tslint --fix -p .",
     "test": "jest **/*.test.ts"
   },
-  "main": "./lib/src/index.mjs",
+  "main": "./lib/index.mjs",
   "exports": {
-    ".": "./lib/src/index.mjs",
-    "./lib/src/": "./lib/src/"
+    ".": "./lib/index.mjs",
+    "./lib/": "./lib/"
   },
   "type": "module",
-  "types": "./lib/src/index.d.ts",
+  "types": "./lib/index.d.ts",
   "author": "Tuomas Nylund",
   "license": "MIT",
   "devDependencies": {
@@ -25,6 +25,7 @@
     "@types/jsdom": "^16.2.1",
     "bufferutil": "^4.0.1",
     "canvas": "^2.6.1",
+    "husky": "^4.2.5",
     "jest": "^26.0.1",
     "jsdom": "^16.2.2",
     "ts-jest": "^25.5.1",
@@ -32,5 +33,10 @@
     "typescript": "^3.8.0",
     "utf-8-validate": "^5.0.2"
   },
-  "dependencies": {}
+  "dependencies": {},
+  "husky": {
+    "hooks": {
+      "pre-push": "npm run build && npm run test"
+    }
+  }
 }

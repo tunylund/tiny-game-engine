@@ -1,5 +1,6 @@
 export default {
   preset: 'ts-jest',
   testEnvironment: 'node',
-  clearMocks: true
-};
+  clearMocks: true,
+  collectCoverage: false
+}

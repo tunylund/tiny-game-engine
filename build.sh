@@ -6,7 +6,7 @@ npm run lint
 
 echo '\ntranspiling...'
 rm -rf lib
-./node_modules/.bin/tsc
+./node_modules/.bin/tsc -p tsconfig.notests.json
 
 echo '\nconverting .js to .mjs...'
 for f in `find lib -name '*.js'`; do
