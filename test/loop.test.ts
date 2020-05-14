@@ -1,4 +1,4 @@
-import loop from '../src/loop'
+import { loop } from '../src/loop'
 import jsdom from 'jsdom'
 
 const window = (new jsdom.JSDOM('', { pretendToBeVisual: true })).window as unknown as Window

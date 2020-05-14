@@ -1,4 +1,4 @@
-import loop from './loop'
+import { loop } from './loop'
 import { Position, position } from './position'
 
 type Drawing = (ctx: CanvasRenderingContext2D) => void

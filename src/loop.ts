@@ -5,7 +5,7 @@ interface TimerContainer {
   cancelAnimationFrame: (token: any) => any
 }
 
-export default function loop(fn: (stepDuration: number, gameDuration: number) => void, win?: TimerContainer|undefined) {
+export function loop(fn: (stepDuration: number, gameDuration: number) => void, win?: TimerContainer|undefined) {
   const raf = (win || window).requestAnimationFrame
   const caf = (win || window).cancelAnimationFrame
 

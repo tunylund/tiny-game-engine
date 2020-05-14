@@ -1,4 +1,4 @@
-import loop from './loop'
+import { loop } from './loop'
 
 export function linear(
   initialValue: number,
