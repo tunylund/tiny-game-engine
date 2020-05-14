@@ -1,5 +1,5 @@
 const timeBasedTurns: { [index: string]: boolean } = {}
-export function timeBasedTurn(name: string, timing = 250) {
+function timeBasedTurn(name: string, timing = 250) {
   if (!timeBasedTurns.hasOwnProperty(name) || timeBasedTurns[name]) {
     timeBasedTurns[name] = false
     setTimeout(() => timeBasedTurns[name] = true, timing)
@@ -9,7 +9,7 @@ export function timeBasedTurn(name: string, timing = 250) {
 }
 
 const turnBasedTurns: any[] = []
-export function turnBasedTurn(name: string, timeBetweenTurns = 0) {
+function turnBasedTurn(name: string, timeBetweenTurns = 0) {
   if (!turnBasedTurns.includes(name)) { turnBasedTurns.splice(0, 0, name) }
   if (turnBasedTurns[0] === name) {
     turnBasedTurns.push(turnBasedTurns.shift())
@@ -21,3 +21,5 @@ export function turnBasedTurn(name: string, timeBetweenTurns = 0) {
   }
   return false
 }
+
+export { timeBasedTurn, turnBasedTurn }

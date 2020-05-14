@@ -1,6 +1,8 @@
-import loop from './loop';
-import { El, el } from './el';
-import { xyz, XYZ } from './xyz';
-import { Position, position } from './position';
-import { draw } from './draw';
-export { El, el, XYZ, xyz, Position, position, draw, loop };
+export * from './loop';
+export * from './entity';
+export * from './position';
+export * from './turn';
+export * from './xyz';
+export * from './draw';
+export * from './controls';
+export * from './collision';

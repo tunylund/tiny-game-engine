@@ -1,4 +1,4 @@
-import { El } from './El'
+import { Entity } from './entity'
 import { position } from './position'
 import { xyz, XYZ, sub, cross, equal, mul, negone, one, add } from './xyz'
 
@@ -38,7 +38,7 @@ export function segmentIntersects(a1: XYZ, a2: XYZ, b1: XYZ, b2: XYZ) {
   return (t >= 0) && (t <= 1) && (u >= 0) && (u <= 1)
 }
 
-export function intersects(a: El, b: El) {
+export function intersects(a: Entity, b: Entity) {
   if (a.dim.sum === 0) { return false }
   if (b.dim.sum === 0) { return false }
   return intersectsDir(a.pos.cor, a.dim, b.pos.cor, b.dim, 'x') &&
@@ -77,7 +77,7 @@ function overlapDir(a1: number, a2: number, b1: number, b2: number, ltrrtl = 0) 
   )
 }
 
-function overlap(a: El, b: El, velocitySignature: XYZ) {
+function overlap(a: Entity, b: Entity, velocitySignature: XYZ) {
   return xyz(
     overlapDir(
       a.pos.cor.x - a.dim.x2,
@@ -97,7 +97,7 @@ function overlap(a: El, b: El, velocitySignature: XYZ) {
   )
 }
 
-export function bump(otherEl: El, collidables: El[] = [], dir = 'z') {
+export function bump(otherEl: Entity, collidables: Entity[] = [], dir = 'z') {
   const fixSelector = xyz(
     dir === 'x' ? 1 : 0,
     dir === 'y' ? 1 : 0,

@@ -1,4 +1,4 @@
-import { half, negone, two, xyz, XYZ, mul, add, sub, div } from './xyz'
+import { half, negone, xyz, XYZ, mul, add, sub, div } from './xyz'
 
 export interface Grid {
   matrix: number[][],

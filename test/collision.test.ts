@@ -1,6 +1,6 @@
 import { segmentIntersects, intersects, bump } from '../src/collision'
 import { position, dimension } from '../src/position'
-import { el } from '../src/el'
+import { entity } from '../src/entity'
 import { xyz } from '../src/xyz'
 
 describe('collision', () => {
@@ -39,36 +39,36 @@ describe('collision', () => {
 
   it('should not intersect', () => {
     expect(intersects(
-      el(position(0, 0, 0),
+      entity(position(0, 0, 0),
         dimension(1, 1, 1)),
-      el(position(1, 1, 1),
+      entity(position(1, 1, 1),
         dimension(1, 1, 1)),
     )).toBeFalsy()
   })
 
   it('should not intersect if some dimension does not collide', () => {
     expect(intersects(
-      el(position(0, 0.5, 0.5),
+      entity(position(0, 0.5, 0.5),
         dimension(1, 1, 1)),
-      el(position(1, 1, 1),
+      entity(position(1, 1, 1),
         dimension(1, 1, 1)),
     )).toBeFalsy()
   })
 
   it('should intersect if partly collides', () => {
     expect(intersects(
-      el(position(0.5, 0.5, 0.5),
+      entity(position(0.5, 0.5, 0.5),
         dimension(1, 1, 1)),
-      el(position(1, 1, 1),
+      entity(position(1, 1, 1),
         dimension(1, 1, 1)),
     )).toBeTruthy()
   })
 
   it('should intersect if entirely collides', () => {
     expect(intersects(
-      el(position(1, 1, 1),
+      entity(position(1, 1, 1),
         dimension(1, 1, 1)),
-      el(position(1, 1, 1),
+      entity(position(1, 1, 1),
         dimension(1, 1, 1)),
     )).toBeTruthy()
   })
