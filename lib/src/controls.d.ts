@@ -1,34 +1,39 @@
 import { XYZ } from './xyz';
-declare class Controls {
-    get touch(): boolean;
-    get leftdown(): boolean;
-    get left(): boolean;
-    get leftup(): boolean;
-    get upleft(): boolean;
-    get up(): boolean;
-    get upright(): boolean;
-    get rightup(): boolean;
-    get right(): boolean;
-    get rightdown(): boolean;
-    get down(): boolean;
-    get downright(): boolean;
-    get downleft(): boolean;
-    get x(): boolean;
-    get space(): boolean;
-    readonly detach: () => void;
-    keys: {
-        [index: string]: boolean;
-    };
-    cor: XYZ;
-    private dir;
-    private clearMouseTimeout;
-    private keyDownListeners;
-    private keyUpListeners;
-    constructor(window: Window, trackMouse?: boolean, centerFn?: () => XYZ);
-    _mouse(event: MouseEvent, center: XYZ): void;
-    _touch(touchPoint: Touch, center: XYZ): void;
-    _key(key: string, isDown: boolean): void;
-    onKeyDown(fn: (key: string, isRepeat: boolean) => void): void;
-    onKeyUp(fn: (key: string) => void): void;
+export declare enum Direction {
+    leftdown = "leftdown",
+    left = "left",
+    leftup = "leftup",
+    upleft = "upleft",
+    up = "up",
+    upright = "upright",
+    rightup = "rightup",
+    right = "right",
+    rightdown = "rightdown",
+    downright = "downright",
+    down = "down",
+    downleft = "downleft"
 }
-export default Controls;
+export interface Controls {
+    cor: XYZ;
+    dir: XYZ;
+    keys: {
+        [key: string]: boolean;
+    };
+    direction: {
+        leftdown: boolean;
+        left: boolean;
+        leftup: boolean;
+        upleft: boolean;
+        up: boolean;
+        upright: boolean;
+        rightup: boolean;
+        right: boolean;
+        rightdown: boolean;
+        downright: boolean;
+        down: boolean;
+        downleft: boolean;
+    };
+    attach: () => void;
+    detach: () => void;
+}
+export declare function buildControls(window: Window): Controls;

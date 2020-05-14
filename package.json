@@ -9,10 +9,13 @@
   "scripts": {
     "build": "./build.sh",
     "lint": "echo \"linting...\" && tslint --fix -p .",
-    "test": "jest"
+    "test": "jest **/*.test.ts"
   },
   "main": "./lib/src/index.mjs",
-  "exports": "./lib/src/index.mjs",
+  "exports": {
+    ".": "./lib/src/index.mjs",
+    "./lib/src/": "./lib/src/"
+  },
   "type": "module",
   "types": "./lib/src/index.d.ts",
   "author": "Tuomas Nylund",
@@ -20,12 +23,14 @@
   "devDependencies": {
     "@types/jest": "^25.2.1",
     "@types/jsdom": "^16.2.1",
+    "bufferutil": "^4.0.1",
     "canvas": "^2.6.1",
     "jest": "^26.0.1",
     "jsdom": "^16.2.2",
     "ts-jest": "^25.5.1",
     "tslint": "^6.1.1",
-    "typescript": "^3.8.0"
+    "typescript": "^3.8.0",
+    "utf-8-validate": "^5.0.2"
   },
   "dependencies": {}
 }
