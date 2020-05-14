@@ -1,21 +1,40 @@
 # tiny-game-engine
-A tiny-game-engine duh
+A tiny-game-engine for games in the BrowserLand
 
 ### Get Started
 
 ```
-import loop from 'tiny-game-engine/lib/loop'
-import draw from 'tiny-game-engine/lib/draw'
+import { loop, draw, entity, position, cube, move, buildControls } from 'tiny-game-engine'
+
+const gameState = {
+  entities: [
+    entity(position(10, 10), cube(20), { hue: 45, speed: 30 }),
+    entity(position(-10, -10), cube(20), { hue: 85, speed: 10 })
+  ]
+}
+
+const controls = buildControls(window)
+
 const stopGameLoop = loop((step, gameTime) => {
-  draw((ctx, cw, ch) => backgroundDrawing(ctx, cw, ch))
+  gameState.entities.map(entity => entity.pos = move(entity.pos, step))
+
+  entities.map(entity => {
+    entity.pos.vel = vector(controls.dir.radian, entity.speed)
+  })
+
+  draw((ctx, cw, ch) => {
+    gameState.entities.map(entity => drawEntity(entity, ctx))
+  })
 })
 
-function backgroundDrawing(ctx, cw, ch) {
-  const bgGradient = ctx.createLinearGradient(0, 0, 0, ch)
-  bgGradient.addColorStop(0, 'hsla(120, 100%, 50%, 0.3)')
-  bgGradient.addColorStop(1, 'hsla(120, 100%, 75%, 0.3)')
-  ctx.fillStyle = bgGradient
+function background(ctx, cw, ch) {
+  ctx.fillStyle = 'hsla(120, 100%, 80%, 1)'
   ctx.fillRect(-cw, -ch, cw * 2, ch * 2)
+}
+
+function drawEntity(entity, ctx) {
+  ctx.fillStyle = `hsla(${entity.hue}, 100%, 50%, 1)`
+  ctx.fillRect(entity.pos.x, entity.pos.y, entity.dim.x, entity.dim.y)
 }
 
 ```

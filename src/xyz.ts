@@ -49,12 +49,12 @@ export function xyz(x: number|XYZ = 0, y = 0, z = 0): XYZ {
   }
 }
 
-export function vector2(radian: number, force = 1) { return xyz(
+export function vector(radian: number, force = 1) { return xyz(
   Math.round(force * Math.cos(radian) * 10000) / 10000,
   Math.round(force * Math.sin(radian) * 10000) / 10000,
 )}
 
-export function constant(v: number) { return xyz(v, v, v) }
+export function cube(v: number) { return xyz(v, v, v) }
 
 const negone = xyz(-1, -1, -1)
 const zero = xyz(0, 0, 0)

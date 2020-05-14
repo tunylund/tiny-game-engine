@@ -1,6 +1,6 @@
 import { intersects } from './collision'
 import { position, Position } from './position'
-import { vector2, xyz, XYZ, sub } from './xyz'
+import { vector, xyz, XYZ, sub } from './xyz'
 
 interface El {
   pos: Position,
@@ -19,7 +19,7 @@ function el<T extends El>(pos: El|Position, dim: XYZ = xyz(), rest?: object): T 
 }
 
 function vectorTo(e: El, otherEl: El, size = dist(e, otherEl)) {
-  return vector2(sub(otherEl.pos.cor, e.pos.cor).radian, size)
+  return vector(sub(otherEl.pos.cor, e.pos.cor).radian, size)
 }
 
 function nearest<T extends El>(els: T[], cor: XYZ): T|null {

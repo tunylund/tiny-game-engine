@@ -1,4 +1,4 @@
-import { vector2, xyz, XYZ, zero } from './xyz'
+import { vector, xyz, XYZ, zero } from './xyz'
 
 export enum Direction {
   leftdown = 'leftdown',
@@ -43,14 +43,14 @@ function handleKey(key: string, isDown: boolean, controls: Controls) {
                 controls.keys.ArrowLeft   ? ( controls.keys.ArrowUp ? 135 : controls.keys.ArrowDown ? 225 : 180 ) :
                 controls.keys.ArrowUp     ? 90 :
                 controls.keys.ArrowDown   ? 270 : Infinity
-  controls.dir = angle > 360 ? xyz() : vector2(angle * (Math.PI / 180), 1)
+  controls.dir = angle > 360 ? xyz() : vector(angle * (Math.PI / 180), 1)
   updateDirection(controls)
 }
 
 function handleTouch(touchPoint: Touch, center: XYZ, controls: Controls, resetTimeout: number) {
   const { pageX, pageY } = touchPoint
   controls.cor = xyz(pageX - center.x, pageY - center.y)
-  controls.dir = vector2(Math.atan2(center.y - pageY, pageX - center.x), 1)
+  controls.dir = vector(Math.atan2(center.y - pageY, pageX - center.x), 1)
   updateDirection(controls)
   clearTimeout(resetTimeout)
   return setTimeout(() => {
@@ -62,7 +62,7 @@ function handleTouch(touchPoint: Touch, center: XYZ, controls: Controls, resetTi
 // function handleMouse(event: MouseEvent, center: XYZ, controls: Controls, clearMouseTimeout: number) {
 //   const { clientX, clientY } = event
 //   controls.cor = xyz(clientX - center.x, clientY - center.y)
-//   controls.dir = vector2(Math.atan2(center.y - clientY, clientX - center.x), 1)
+//   controls.dir = vector(Math.atan2(center.y - clientY, clientX - center.x), 1)
 //   updateDirection(controls)
 //   clearTimeout(clearMouseTimeout)
 //   return setTimeout(() => {

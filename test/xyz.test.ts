@@ -1,4 +1,4 @@
-import { xyz, vector2, add, sub } from '../src/xyz'
+import { xyz, vector, add, sub } from '../src/xyz'
 
 describe('xyz', () => {
   it('should add', () => {
@@ -27,12 +27,12 @@ describe('xyz', () => {
       [Math.PI * 5 / 4, 1, -0.7071, -0.7071, 225],
       [Math.PI * 7 / 4, 1, 0.7071, -0.7071, 315]
     ])('should know angles $angle', (radian, force, x, y, angle) => {
-      const a = vector2(radian, force)
+      const a = vector(radian, force)
       expect(a).toMatchObject({ x, y, angle, radian })
     })
 
     it('should not get confused with negative angles', () => {
-      const a = vector2(Math.PI * -1 / 4, 1)
+      const a = vector(Math.PI * -1 / 4, 1)
       expect(a).toMatchObject({
         x: 0.7071,
         y: -0.7071,
