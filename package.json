@@ -36,7 +36,7 @@
   "dependencies": {},
   "husky": {
     "hooks": {
-      "pre-push": "npm run build && npm run test"
+      "pre-push": "./pre-push.sh"
     }
   }
 }
