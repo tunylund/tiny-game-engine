@@ -1,4 +1,4 @@
-import { vector, xyz, XYZ, zero } from './xyz'
+import { vector, xyz, XYZ, zero, equal } from './xyz'
 
 export enum Direction {
   leftdown = 'leftdown',
@@ -43,7 +43,7 @@ function handleKey(key: string, isDown: boolean, controls: Controls) {
                 controls.keys.ArrowLeft   ? ( controls.keys.ArrowUp ? 135 : controls.keys.ArrowDown ? 225 : 180 ) :
                 controls.keys.ArrowUp     ? 90 :
                 controls.keys.ArrowDown   ? 270 : Infinity
-  controls.dir = angle > 360 ? xyz() : vector(angle * (Math.PI / 180), 1)
+  controls.dir = angle > 360 ? zero : vector(angle * (Math.PI / 180), 1)
   updateDirection(controls)
 }
 
@@ -88,14 +88,21 @@ function updateDirection(controls: Controls) {
   direction.down = size > 0 && angle > 225 && angle < 275
 }
 
-export function buildControls(window: Window): Controls {
+export function buildControls(window: Window, onChange: (controls: Controls) => any = () => {}): Controls {
   let resetTimeout: number
 
+  const changeDetection = (fn: any) => (e: Event) => {
+    const beforeDir = xyz(controls.dir)
+    const beforeCor = xyz(controls.cor)
+    fn(e)
+    if (!equal(beforeDir, controls.dir) || !equal(beforeCor, controls.cor)) onChange(controls)
+  }
+
   const center = () => xyz(window.innerWidth / 2, window.innerHeight / 2)
-  const keyDown = (e: KeyboardEvent) => handleKey(e.code, true, controls)
-  const keyUp = (e: KeyboardEvent) => handleKey(e.code, false, controls)
-  const touchStart = (ev: TouchEvent) => resetTimeout = handleTouch(ev.changedTouches[0], center(), controls, resetTimeout)
-  const touchEnd = () => controls.dir = controls.cor = zero
+  const keyDown = changeDetection((e: KeyboardEvent) => handleKey(e.code, true, controls))
+  const keyUp = changeDetection((e: KeyboardEvent) => handleKey(e.code, false, controls))
+  const touchStart = changeDetection((ev: TouchEvent) => resetTimeout = handleTouch(ev.changedTouches[0], center(), controls, resetTimeout))
+  const touchEnd = changeDetection(() => controls.dir = controls.cor = zero)
   // const mouse = (ev: MouseEvent) => resetTimeout = handleMouse(ev, center(), controls, resetTimeout)
 
   const attach = () => {

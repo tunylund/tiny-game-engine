@@ -36,4 +36,4 @@ export interface Controls {
     attach: () => void;
     detach: () => void;
 }
-export declare function buildControls(window: Window): Controls;
+export declare function buildControls(window: Window, onChange?: (controls: Controls) => any): Controls;
