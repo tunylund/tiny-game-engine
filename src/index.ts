@@ -1,3 +1,4 @@
+export * from './animation'
 export * from './loop'
 export * from './entity'
 export * from './position'
