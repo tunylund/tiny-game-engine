@@ -1,4 +1,4 @@
-import { linear } from "../src/animation"
+import { linear } from '../src/animation'
 
 describe('animation', () => {
   describe('linear', () => {

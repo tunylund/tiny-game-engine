@@ -3,17 +3,19 @@ import { position, Position } from './position'
 import { vector, xyz, XYZ, sub } from './xyz'
 
 interface Entity {
-  pos: Position,
+  pos: Position
   dim: XYZ
+  dir: XYZ
 }
 
-function entity<T extends Entity>(pos: Entity|Position, dim: XYZ = xyz(), rest?: object): T {
+function entity<T extends Entity>(pos: Entity|Position, dim = xyz(), dir = xyz(), rest?: object): T {
   if ('cor' in pos) {
-    return Object.assign({ pos, dim } as T, rest)
+    return Object.assign({ pos, dim, dir } as T, rest)
   } else {
     return Object.assign({
       pos: position(pos.pos),
-      dim: xyz(pos.dim)
+      dim: xyz(pos.dim),
+      dir: xyz(pos.dir)
     } as T, rest)
   }
 }

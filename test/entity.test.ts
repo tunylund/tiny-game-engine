@@ -5,7 +5,7 @@ import { xyz } from '../src/xyz'
 const a = entity(position(0, 0, 0), xyz(1, 1, 1))
 const b = entity(position(2, 2, 2), xyz(1, 1, 1))
 
-describe('el', () => {
+describe('entity', () => {
   it('should know distance', () => {
     expect(distance(a, b)).toEqual(xyz(2, 2, 2).size)
     expect(distance(b, a)).toEqual(distance(a, b))
@@ -15,7 +15,7 @@ describe('el', () => {
     interface SomeInterface extends Entity {
       foo: string
     }
-    const c = entity<SomeInterface>(position(), xyz(), {foo: 'bar'})
+    const c = entity<SomeInterface>(position(), xyz(), xyz(), {foo: 'bar'})
     expect(c.foo).toBe('bar')
   })
 
