@@ -115,4 +115,4 @@ function isometricDraw(
   }, pos, undefined, (win || window))
 }
 
-export { draw, drawImage, drawingLayer, fixedSizeDrawingLayer, isometricDraw, stopDrawLoop, Draw }
+export { draw, drawImage, drawingLayer, fixedSizeDrawingLayer, isometricDraw, stopDrawLoop, Draw, Layer }
