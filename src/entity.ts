@@ -8,7 +8,7 @@ interface Entity {
   dir: XYZ
 }
 
-function entity<T extends Entity>(pos: Entity|Position, dim = xyz(), dir = xyz(), rest?: object): T {
+function entity<T extends Entity>(pos: Entity|Position = position(), dim = xyz(), dir = xyz(), rest?: object): T {
   if ('cor' in pos) {
     return Object.assign({ pos, dim, dir } as T, rest)
   } else {

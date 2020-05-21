@@ -55,21 +55,27 @@ function addDrawable(z: number, drawFn: Draw, win: Window, layer?: Layer) {
   drawables.splice(ix + 1, 0, { z, draw: drawFn, layer })
 }
 
-function drawingLayer(win?: Window): Layer {
-  const w = win || window
-  const canvas = w.document.createElement('canvas')
+function fixedSizeDrawingLayer(w: number, h: number, win?: Window): Layer {
+  const canvas = (win || window).document.createElement('canvas')
   const layer = {
     cw: 0, ch: 0, canvas,
     context: canvas.getContext('2d') as CanvasRenderingContext2D,
   }
-  function onResize() {
-    canvas.width = w.innerWidth
-    canvas.height = w.innerHeight
-    layer.cw = canvas.width / 2
-    layer.ch = canvas.height / 2
-  }
-  w.addEventListener('resize', onResize)
-  onResize()
+  canvas.width = w
+  canvas.height = h
+  layer.cw = canvas.width / 2
+  layer.ch = canvas.height / 2
+  return layer
+}
+function drawingLayer(win?: Window): Layer {
+  const w = win || window
+  const layer = fixedSizeDrawingLayer(w.innerWidth, w.innerHeight, win)
+  w.addEventListener('resize', () => {
+    layer.canvas.width = w.innerWidth
+    layer.canvas.height = w.innerHeight
+    layer.cw = layer.canvas.width / 2
+    layer.ch = layer.canvas.height / 2
+  })
   return layer
 }
 
@@ -109,4 +115,4 @@ function isometricDraw(
   }, pos, undefined, (win || window))
 }
 
-export { draw, drawImage, drawingLayer, isometricDraw, stopDrawLoop, Draw }
+export { draw, drawImage, drawingLayer, fixedSizeDrawingLayer, isometricDraw, stopDrawLoop, Draw }
