@@ -1,6 +1,7 @@
-import { draw, isometricDraw, stopDrawLoop } from '../src/draw'
+import { draw, isometricDraw, stopDrawLoop, drawImage } from '../src/draw'
 import jsdom from 'jsdom'
 import { position } from '../src/position'
+import { xyz } from '../src/xyz'
 
 function prepare() {
   const { window } = new jsdom.JSDOM('', { pretendToBeVisual: true })
@@ -24,7 +25,7 @@ describe('draw', () => {
       expect(cw).toEqual(50)
       expect(ch).toEqual(25)
       done()
-    }, position(), undefined, domWindow)
+    }, xyz(), undefined, domWindow)
   })
 
   it('should draw in a loop', (done) => {
@@ -33,21 +34,21 @@ describe('draw', () => {
       draw((ctx, cw, ch) => {
         stopDrawLoop()
         done()
-      }, position(), undefined, domWindow)
-    }, position(), undefined, domWindow)
+      }, xyz(), undefined, domWindow)
+    }, xyz(), undefined, domWindow)
   })
 
   it('should organize drawing by their z index', (done) => {
     const {domWindow} = prepare()
     const drawOrder: number[] = []
-    draw(() => drawOrder.push(0), position(0, 0, 0), undefined, domWindow)
-    draw(() => drawOrder.push(-1), position(0, 0, -1), undefined, domWindow)
-    draw(() => drawOrder.push(1), position(0, 0, 0), undefined, domWindow)
+    draw(() => drawOrder.push(0), xyz(0, 0, 0), undefined, domWindow)
+    draw(() => drawOrder.push(-1), xyz(0, 0, -1), undefined, domWindow)
+    draw(() => drawOrder.push(1), xyz(0, 0, 0), undefined, domWindow)
     draw(() => {
       stopDrawLoop()
       expect(drawOrder).toMatchObject([-1, 0, 1])
       done()
-    }, position(0, 0, 0), undefined, domWindow)
+    }, xyz(0, 0, 0), undefined, domWindow)
   })
 
   it('should provide fn api', (done) => {
@@ -57,7 +58,7 @@ describe('draw', () => {
         stopDrawLoop()
         expect(ictx).toBeTruthy()
         done()
-      }, position(), domWindow)
-    }, position(), undefined, domWindow)
+      }, xyz(), domWindow)
+    }, xyz(), undefined, domWindow)
   })
 })

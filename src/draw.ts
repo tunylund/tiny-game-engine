@@ -1,5 +1,6 @@
 import { loop } from './loop'
 import { Position, position } from './position'
+import { XYZ, zero, xyz } from './xyz'
 
 type Drawing = (ctx: CanvasRenderingContext2D) => void
 type Draw = (ctx: CanvasRenderingContext2D, cw: number, ch: number) => void
@@ -8,22 +9,11 @@ function setup(window: Window) {
   const layer = drawingLayer(window)
   window.document.body.appendChild(layer.canvas)
   const i = 0
-  const stopThisDrawLoop = loop((step, total) => {
-    const iteration = drawables.splice(0, drawables.length)
-    while (iteration.length > 0) {
-      const drawable = iteration.shift()
-      if (drawable) {
-        const l = drawable.layer || layer
-        if (l.context) drawable.draw(l.context, l.cw, l.ch)
-      }
-    }
-  }, window)
+  const stopThisDrawLoop = loop(() => drawStep(layer), window)
 
   return () => {
     stopThisDrawLoop()
-    if (layer.canvas && layer.canvas.parentNode) {
-      layer.canvas.parentNode.removeChild(layer.canvas)
-    }
+    layer.canvas.remove()
   }
 }
 
@@ -46,6 +36,17 @@ let loopStop: (() => void)|null = null
 function stopDrawLoop() {
   if (loopStop) { loopStop() }
   loopStop = null
+}
+
+function drawStep(defaultLayer: Layer) {
+  const iteration = drawables.splice(0, drawables.length)
+  while (iteration.length > 0) {
+    const drawable = iteration.shift()
+    if (drawable) {
+      const l = drawable.layer || defaultLayer
+      if (l.context) drawable.draw(l.context, l.cw, l.ch)
+    }
+  }
 }
 
 function addDrawable(z: number, drawFn: Draw, win: Window, layer?: Layer) {
@@ -81,13 +82,12 @@ function drawingLayer(win?: Window): Layer {
 
 function draw(
   drawFn: Draw|Drawing,
-  pos: Position = position(),
+  offset: XYZ = zero,
   layer?: Layer,
   win?: Window) {
-  addDrawable(pos.cor.z, (context, cw, ch) => {
-    if (!context) throw new Error('no context')
+  addDrawable(offset.z, (context, cw, ch) => {
     context.save()
-    context.translate(cw, ch)
+    context.translate(cw - offset.x2, ch - offset.y2)
     drawFn(context, cw, ch)
     context.setTransform(1, 0, 0, 1, 0, 0)
     context.restore()
@@ -96,23 +96,22 @@ function draw(
 
 function drawImage(
   img: HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | ImageBitmap,
-  pos: Position = position(),
   layer?: Layer,
   win?: Window) {
   draw((ctx: CanvasRenderingContext2D) => {
-    ctx.drawImage(img, pos.cor.x - img.width / 2, pos.cor.y - img.height / 2)
-  }, pos, layer, win)
+    ctx.drawImage(img, 0, 0)
+  }, xyz(img.width, img.height), layer, win)
 }
 
 function isometricDraw(
   drawFn: Draw,
-  pos: Position,
+  offset: XYZ,
   win?: Window) {
   draw((ctx, cw, ch) => {
     ctx.transform(0.707, 0.409, -0.707, 0.409, 0, -0.816)
-    ctx.translate(-pos.cor.z, -pos.cor.z)
+    ctx.translate(-offset.z, -offset.z)
     drawFn(ctx, cw, ch)
-  }, pos, undefined, (win || window))
+  }, offset, undefined, (win || window))
 }
 
 export { draw, drawImage, drawingLayer, fixedSizeDrawingLayer, isometricDraw, stopDrawLoop, Draw, Layer }
