@@ -25,6 +25,7 @@ export function sequence(seq: number[], duration: number, loopOver: boolean): Se
     step: (step: number) => {
       age += step
       ix = linear(0, lastIx, duration, 1, age)
+      s.value = seq[ix]
       if (loopOver && ix === lastIx) age = 0
     }
   }
