@@ -7,10 +7,21 @@ export declare function sequence(seq: number[], duration: number, loopOver: bool
 export interface FrameSequence {
     x: number;
     y: number;
+    image: {
+        width: number;
+        height: number;
+    };
+    frameSize: {
+        width: number;
+        height: number;
+    };
     step: (step: number) => void;
 }
 export declare function frameSequence(seq: number[], duration: number, loopOver: boolean, image: {
     width: number;
     height: number;
-}, tileSize: number): FrameSequence;
+}, frameSize: {
+    width: number;
+    height: number;
+}): FrameSequence;
 export declare function valueOverTime(fn: (currentValue: number) => any, initialValue: number, targetValue: number, precision: number, duration: number, loopOver: boolean, win?: Window): () => void;

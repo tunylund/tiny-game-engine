@@ -22,7 +22,7 @@ export interface Sequence {
   step: (step: number) => void
 }
 export function sequence(seq: number[], duration: number, loopOver: boolean): Sequence {
-  const lastIx = frames.length - 1
+  const lastIx = seq.length - 1
   let age = 0, ix = 0
   const s = {
     value: seq[0],
@@ -38,18 +38,25 @@ export function sequence(seq: number[], duration: number, loopOver: boolean): Se
 export interface FrameSequence {
   x: number
   y: number
+  image: { width: number, height: number }
+  frameSize: { width: number, height: number }
   step: (step: number) => void
 }
-export function frameSequence(seq: number[], duration: number, loopOver: boolean, image: {width: number, height: number}, tileSize: number): FrameSequence {
+export function frameSequence(
+  seq: number[],
+  duration: number,
+  loopOver: boolean,
+  image: {width: number, height: number},
+  frameSize: {width: number, height: number}): FrameSequence {
   const valueSequence = sequence(seq, duration, loopOver)
-  const framesPerRow = Math.floor(image.width / tileSize)
+  const framesPerRow = Math.floor(image.width / frameSize.width)
   const fs = {
-    x: 0, y: 0,
+    x: 0, y: 0, image, frameSize,
     step: (step: number) => {
       valueSequence.step(step)
       const frame = valueSequence.value
-      fs.x = frame % framesPerRow * tileSize,
-      fs.y = Math.floor(frame / framesPerRow)
+      fs.x = frame % framesPerRow * frameSize.width,
+      fs.y = Math.floor(frame / framesPerRow) * frameSize.height
     }
   }
   fs.step(0)
