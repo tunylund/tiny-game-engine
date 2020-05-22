@@ -20,14 +20,12 @@ export interface Sequence {
 export function sequence(seq: number[], duration: number, loopOver: boolean): Sequence {
   const lastIx = seq.length - 1
   let age = 0, ix = 0
-  const s = {
-    value: seq[0],
-    step: (step: number) => {
-      age += step
-      ix = linear(0, lastIx, duration, 1, age)
-      s.value = seq[ix]
-      if (loopOver && ix === lastIx) age = 0
-    }
+  const s = { value: seq[0], step: stepFn }
+  function stepFn(step: number) {
+    age += step
+    ix = linear(0, lastIx, duration, 1, age)
+    s.value = seq[ix]
+    if (loopOver && ix === lastIx) age = 0
   }
   return s
 }
