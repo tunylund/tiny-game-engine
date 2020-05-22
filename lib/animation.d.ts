@@ -1,4 +1,4 @@
-export declare function linear(initialValue: number, currentValue: number, targetValue: number, duration: number, precision: number, step: number): number;
+export declare function linear(initialValue: number, targetValue: number, duration: number, precision: number, age: number): number;
 export interface Sequence {
     value: number;
     step: (step: number) => void;
@@ -24,4 +24,3 @@ export declare function frameSequence(seq: number[], duration: number, loopOver:
     width: number;
     height: number;
 }): FrameSequence;
-export declare function valueOverTime(fn: (currentValue: number) => any, initialValue: number, targetValue: number, precision: number, duration: number, loopOver: boolean, win?: Window): () => void;

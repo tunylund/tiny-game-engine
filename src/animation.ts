@@ -1,20 +1,16 @@
-import { loop } from './loop'
-
 export function linear(
   initialValue: number,
-  currentValue: number,
   targetValue: number,
   duration: number,
   precision: number,
-  step: number) {
-  const mainDiff = targetValue - initialValue
-  const stepPartial = duration / (step * 1000)
-  const nextValueDiff = mainDiff / (stepPartial < 1 ? 1 : stepPartial)
-  const nextValue = currentValue + nextValueDiff
-  const previousDiff = targetValue - currentValue
-  const newDiff = Math.abs(targetValue - nextValue)
-  return newDiff > Math.abs(previousDiff) ? targetValue :
-         newDiff <= precision ? targetValue : nextValue
+  age: number) {
+  const range = targetValue - initialValue
+  const valuePerStep = range / duration
+  const rawValue = initialValue + valuePerStep * age
+  const v = Math.floor(rawValue * 10000),
+        p = Math.floor(precision * 10000)
+  const rounded = (v - v % p) / 10000
+  return rounded > targetValue ? targetValue : rounded
 }
 
 export interface Sequence {
@@ -28,7 +24,7 @@ export function sequence(seq: number[], duration: number, loopOver: boolean): Se
     value: seq[0],
     step: (step: number) => {
       age += step
-      ix = linear(0, ix, lastIx, duration, 1, age)
+      ix = linear(0, lastIx, duration, 1, age)
       if (loopOver && ix === lastIx) age = 0
     }
   }
@@ -61,24 +57,4 @@ export function frameSequence(
   }
   fs.step(0)
   return fs
-}
-
-export function valueOverTime(
-  fn: (currentValue: number) => any,
-  initialValue: number,
-  targetValue: number,
-  precision: number,
-  duration: number,
-  loopOver: boolean,
-  win?: Window) {
-  let currentValue = initialValue
-  const stop = loop((step, total) => {
-    currentValue = linear(initialValue, currentValue, targetValue, duration, precision, step)
-    if (currentValue === targetValue) {
-      if (loopOver) currentValue = initialValue
-      else stop()
-    }
-    fn(currentValue)
-  }, win)
-  return stop
 }
