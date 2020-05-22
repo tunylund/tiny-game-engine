@@ -4,6 +4,7 @@ export function linear(
   duration: number,
   precision: number,
   age: number) {
+  if (duration === 0) return targetValue
   const range = targetValue - initialValue
   const valuePerStep = range / duration
   const rawValue = initialValue + valuePerStep * age

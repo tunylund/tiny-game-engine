@@ -2,6 +2,9 @@ import { linear, sequence } from '../src/animation'
 
 describe('animation', () => {
   describe('linear', () => {
+    it('should return last value when duration is 0', () => {
+      expect(linear(0, 3, 0, 1, 0)).toEqual(3)
+    })
     it('should calculate the initial value in linear scale', () => {
       expect(linear(0, 3, 3000, 1, 0)).toEqual(0)
     })
