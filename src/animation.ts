@@ -17,17 +17,34 @@ export function linear(
          newDiff <= precision ? targetValue : nextValue
 }
 
+export interface FrameSequence {
+  frame: number
+  stop: () => void
+}
+export function frameSequence(frames: number[], duration: number, loopOver: boolean): FrameSequence {
+  let frame = frames[0]
+  const stop = valueOverTime(index => {
+    frame = frames[index]
+  }, 0, frames.length, 1, duration, loopOver)
+  return { frame, stop }
+}
+
 export function valueOverTime(
   fn: (currentValue: number) => any,
   initialValue: number,
   targetValue: number,
   precision: number,
   duration: number,
+  loopOver: boolean,
   win?: Window) {
   let currentValue = initialValue
   const stop = loop((step, total) => {
     currentValue = linear(initialValue, currentValue, targetValue, duration, precision, step)
-    if (currentValue === targetValue) { stop() }
+    if (currentValue === targetValue) {
+      if (loopOver) currentValue = initialValue
+      else stop()
+    }
     fn(currentValue)
   }, win)
+  return stop
 }

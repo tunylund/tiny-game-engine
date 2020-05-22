@@ -3,6 +3,7 @@ import { position } from './position'
 import { xyz, XYZ, sub, cross, equal, mul, negone, one, add } from './xyz'
 
 // glory to https://github.com/pgkelley4/line-segments-intersect/blob/master/js/line-segments-intersect.js
+// not box, segment
 export function segmentIntersects(a1: XYZ, a2: XYZ, b1: XYZ, b2: XYZ) {
   const r = sub(a2, a1)
   const s = sub(b2, b1)
@@ -37,7 +38,6 @@ export function segmentIntersects(a1: XYZ, a2: XYZ, b1: XYZ, b2: XYZ) {
   const t = cross(sub(b1, a1), s).z / denominator
   return (t >= 0) && (t <= 1) && (u >= 0) && (u <= 1)
 }
-
 export function intersects(a: Entity, b: Entity) {
   if (a.dim.sum === 0) { return false }
   if (b.dim.sum === 0) { return false }
