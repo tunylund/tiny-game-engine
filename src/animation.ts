@@ -17,16 +17,43 @@ export function linear(
          newDiff <= precision ? targetValue : nextValue
 }
 
-export interface FrameSequence {
-  frame: number
-  stop: () => void
+export interface Sequence {
+  value: number
+  step: (step: number) => void
 }
-export function frameSequence(frames: number[], duration: number, loopOver: boolean): FrameSequence {
-  let frame = frames[0]
-  const stop = valueOverTime(index => {
-    frame = frames[index]
-  }, 0, frames.length, 1, duration, loopOver)
-  return { frame, stop }
+export function sequence(seq: number[], duration: number, loopOver: boolean): Sequence {
+  const lastIx = frames.length - 1
+  let age = 0, ix = 0
+  const s = {
+    value: seq[0],
+    step: (step: number) => {
+      age += step
+      ix = linear(0, ix, lastIx, duration, 1, age)
+      if (loopOver && ix === lastIx) age = 0
+    }
+  }
+  return s
+}
+
+export interface FrameSequence {
+  x: number
+  y: number
+  step: (step: number) => void
+}
+export function frameSequence(seq: number[], duration: number, loopOver: boolean, image: {width: number, height: number}, tileSize: number): FrameSequence {
+  const valueSequence = sequence(seq, duration, loopOver)
+  const framesPerRow = Math.floor(image.width / tileSize)
+  const fs = {
+    x: 0, y: 0,
+    step: (step: number) => {
+      valueSequence.step(step)
+      const frame = valueSequence.value
+      fs.x = frame % framesPerRow * tileSize,
+      fs.y = Math.floor(frame / framesPerRow)
+    }
+  }
+  fs.step(0)
+  return fs
 }
 
 export function valueOverTime(
