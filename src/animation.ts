@@ -16,17 +16,21 @@ export function linear(
 
 export interface Sequence {
   value: number
+  finished: boolean
   step: (step: number) => void
 }
 export function sequence(seq: number[], duration: number, loopOver: boolean): Sequence {
   const lastIx = seq.length - 1
   let age = 0, ix = 0
-  const s = { value: seq[0], step: stepFn }
+  const s = { value: seq[0], step: stepFn, finished: false }
   function stepFn(step: number) {
     age += step
     ix = linear(0, lastIx, duration, 1, age)
     s.value = seq[ix]
-    if (loopOver && ix === lastIx) age = 0
+    if (ix === lastIx) {
+      if (loopOver) age = 0
+      else s.finished = true
+    }
   }
   return s
 }
@@ -34,6 +38,7 @@ export function sequence(seq: number[], duration: number, loopOver: boolean): Se
 export interface FrameSequence {
   x: number
   y: number
+  finished: boolean
   image: { width: number, height: number }
   frameSize: { width: number, height: number }
   step: (step: number) => void
@@ -47,9 +52,10 @@ export function frameSequence(
   const valueSequence = sequence(seq, duration, loopOver)
   const framesPerRow = Math.floor(image.width / frameSize.width)
   const fs = {
-    x: 0, y: 0, image, frameSize,
+    x: 0, y: 0, image, frameSize, finished: false,
     step: (step: number) => {
       valueSequence.step(step)
+      fs.finished = valueSequence.finished
       const frame = valueSequence.value
       fs.x = frame % framesPerRow * frameSize.width,
       fs.y = Math.floor(frame / framesPerRow) * frameSize.height

@@ -1,12 +1,14 @@
 export declare function linear(initialValue: number, targetValue: number, duration: number, precision: number, age: number): number;
 export interface Sequence {
     value: number;
+    finished: boolean;
     step: (step: number) => void;
 }
 export declare function sequence(seq: number[], duration: number, loopOver: boolean): Sequence;
 export interface FrameSequence {
     x: number;
     y: number;
+    finished: boolean;
     image: {
         width: number;
         height: number;
