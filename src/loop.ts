@@ -24,7 +24,7 @@ export function loop(fn: (stepDuration: number, gameDuration: number) => void, w
   }
 
   return () => {
-    caf(frmToken)
+    if (frmToken !== STOP) caf(frmToken)
     frmToken = STOP
   }
 }
