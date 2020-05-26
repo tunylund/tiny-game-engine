@@ -94,8 +94,10 @@ export function buildControls(window: Window, onChange: (controls: Controls) => 
   const changeDetection = (fn: any) => (e: Event) => {
     const beforeDir = xyz(controls.dir)
     const beforeCor = xyz(controls.cor)
+    const beforeKeys = JSON.stringify(controls.keys)
     fn(e)
     if (!equal(beforeDir, controls.dir) || !equal(beforeCor, controls.cor)) onChange(controls)
+    else if (beforeKeys !== JSON.stringify(controls.keys)) onChange(controls)
   }
 
   const center = () => xyz(window.innerWidth / 2, window.innerHeight / 2)
