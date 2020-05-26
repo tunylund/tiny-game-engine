@@ -97,19 +97,13 @@ function overlap(a: Entity, b: Entity, velocitySignature: XYZ) {
   )
 }
 
-export function bump(otherEl: Entity, collidables: Entity[] = [], dir = 'z') {
-  const fixSelector = xyz(
-    dir === 'x' ? 1 : 0,
-    dir === 'y' ? 1 : 0,
-    dir === 'z' ? 1 : 0,
-  )
-
-  const sumOfIntersections = collidables
+export function bump(otherEl: Entity, collidables: Entity[] = [], fixSelector: XYZ = one) {
+  const biggestOverlap = collidables
     .filter((c) => intersects(otherEl, c))
     .map((c) => overlap(otherEl, c, otherEl.pos.vel.signature))
     .reduce((a, b) => a.sum > b.sum ? a : b, xyz())
-  const whatever = mul(sumOfIntersections, otherEl.pos.vel.signature)
-  const correction = mul(whatever, fixSelector)
+  const fixVector = mul(biggestOverlap, otherEl.pos.vel.signature)
+  const correction = mul(fixVector, fixSelector)
 
   if (correction.sum === 0) {
     return otherEl.pos

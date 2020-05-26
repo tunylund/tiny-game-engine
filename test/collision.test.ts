@@ -77,7 +77,7 @@ describe('collision', () => {
     expect(bump(
       {pos: position(0, 0, 0), dim: dimension(1, 1, 1), dir: zero},
       [{pos: position(1, 1, 1), dim: dimension(1, 1, 1), dir: zero}],
-      'z',
+      xyz(0, 0, 1),
     )).toMatchObject(position(0, 0, 0))
   })
 
@@ -85,7 +85,7 @@ describe('collision', () => {
     expect(bump(
       {pos: position(0.5, 0.5, 0.75, 1, 1, 1), dim: dimension(1, 1, 1), dir: zero},
       [{pos: position(1, 1, 1), dim: dimension(1, 1, 1), dir: zero}],
-      'z',
+      xyz(0, 0, 1),
     )).toMatchObject(position(0.5, 0.5, 0, 1, 1, 0))
   })
 
@@ -93,7 +93,7 @@ describe('collision', () => {
     expect(bump(
       {pos: position(1.5, 1.5, 1.25, 1, 1, -1), dim: dimension(1, 1, 1), dir: zero},
       [{pos: position(1, 1, 1), dim: dimension(1, 1, 1), dir: zero}],
-      'z',
+      xyz(0, 0, 1),
     )).toMatchObject(position(1.5, 1.5, 2, 1, 1, -0))
   })
 
@@ -101,7 +101,7 @@ describe('collision', () => {
     expect(bump(
       {pos: position(-1, -1, 0, 1, 0, 0), dim: dimension(1, 1, 1), dir: zero},
       [{pos: position(0, 0, 0), dim: dimension(10, 10, 1), dir: zero}],
-      'x',
+      xyz(1, 0, 0),
     )).toMatchObject(position(-5.5, -1, 0, 0, 0, 0))
   })
 })
