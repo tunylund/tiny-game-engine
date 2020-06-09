@@ -1,9 +1,39 @@
-import { segmentIntersects, intersects, bump } from '../src/collision'
+import { segmentIntersects, intersects, bump, entityCollidesWithPolygon2d } from '../src/collision'
 import { position, dimension } from '../src/position'
 import { entity } from '../src/entity'
-import { xyz, zero } from '../src/xyz'
+import { xyz, zero, one } from '../src/xyz'
 
 describe('collision', () => {
+
+  describe('polygon intersection', () => {
+    const entityAt = (x: number, y: number) => entity(position(xyz(x, y)), one)
+    const triangle = [ xyz(0, 0), xyz(1, 0), xyz(0, 1) ]
+    const lOutside = entityAt(-0.51, 0)
+    const tOutside = entityAt(0, -0.51)
+    const rOutside = entityAt(1.51, 0)
+    const bOutside = entityAt(0, 1.51)
+    it('should detect when outside', () => {
+      expect(entityCollidesWithPolygon2d(lOutside, triangle)).toBeFalsy()
+      expect(entityCollidesWithPolygon2d(tOutside, triangle)).toBeFalsy()
+      expect(entityCollidesWithPolygon2d(rOutside, triangle)).toBeFalsy()
+      expect(entityCollidesWithPolygon2d(bOutside, triangle)).toBeFalsy()
+    })
+    const lOverlapping = entityAt(-0.5, -0)
+    const tOverlapping = entityAt(0, -0.5)
+    const rOverlapping = entityAt(0.5, 0)
+    const bOverlapping = entityAt(0, 0.5)
+    it('should detect when overlapping', () => {
+      expect(entityCollidesWithPolygon2d(lOverlapping, triangle)).toBeTruthy()
+      expect(entityCollidesWithPolygon2d(tOverlapping, triangle)).toBeTruthy()
+      expect(entityCollidesWithPolygon2d(rOverlapping, triangle)).toBeTruthy()
+      expect(entityCollidesWithPolygon2d(bOverlapping, triangle)).toBeTruthy()
+    })
+    const rRotated = entity(position(1, 0), one, xyz(1, 1))
+    it('should detect when rotated', () => {
+      expect(entityCollidesWithPolygon2d(rRotated, triangle)).toBeTruthy()
+    })
+  })
+
   // it('should provide closest position upon collision', () => {
   //   const pos = position(0.25, 0.25, 0.25, 1, 1, 1)
   //   const dim = { x: 1, y: 1, z: 1 }

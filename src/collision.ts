@@ -1,6 +1,94 @@
 import { Entity } from './entity'
 import { position } from './position'
-import { xyz, XYZ, sub, cross, equal, mul, negone, one, add } from './xyz'
+import { xyz, XYZ, sub, cross, equal, mul, negone, one, add, dot } from './xyz'
+
+// glory to http://www.jeffreythompson.org/collision-detection
+
+export function entityCollidesWithPolygon2d(entity: Entity, polygon: XYZ[]) {
+  const entityPoly = [
+    xyz(entity.pos.cor.x - entity.dim.x2, entity.pos.cor.y - entity.dim.y2),
+    xyz(entity.pos.cor.x + entity.dim.x2, entity.pos.cor.y - entity.dim.y2),
+    xyz(entity.pos.cor.x + entity.dim.x2, entity.pos.cor.y + entity.dim.y2),
+    xyz(entity.pos.cor.x - entity.dim.x2, entity.pos.cor.y + entity.dim.y2)
+  ].map(({x, y}) => xyz(
+    x * Math.cos(entity.dir.radian) - y * Math.sin(entity.dir.radian),
+    x * Math.sin(entity.dir.radian) + y * Math.cos(entity.dir.radian)
+  ))
+
+  return polyPoly(polygon, entityPoly)
+}
+
+function polyPoly(p1: XYZ[], p2: XYZ[]): boolean {
+  if (p1.length < 2 || p2.length < 1) return false
+  for (let current=0, next=1; current<p1.length; current++, next++) {
+    if (next === p1.length) next = 0
+    const vc = p1[current]
+    const vn = p1[next]
+
+    const collision = polyLine(p2, vc.x,vc.y,vn.x,vn.y)
+    if (collision) return true
+    const inside = polyPoint(p1, p2[0].x, p2[0].y)
+    if (inside) return true
+  }
+
+  return false
+}
+
+function polyLine(vertices: XYZ[], x1: number, y1: number, x2: number, y2: number): boolean {
+  for (let current=0, next=1; current<vertices.length; current++, next++) {
+    if (next === vertices.length) next = 0
+    const x3 = vertices[current].x
+    const y3 = vertices[current].y
+    const x4 = vertices[next].x
+    const y4 = vertices[next].y
+    const hit = lineLine(x1, y1, x2, y2, x3, y3, x4, y4)
+    if (hit) return true
+  }
+
+  return false
+}
+
+function polyRect(vertices: XYZ[], rx: number, ry: number, rw: number, rh: number): boolean {
+  for (let current=0, next=1; current<vertices.length; current++, next++) {
+    if (next === vertices.length) next = 0
+    const vc = vertices[current]
+    const vn = vertices[next]
+    const collision = lineRect(vc.x, vc.y, vn.x, vn.y, rx, ry, rw, rh)
+    if (collision) return true
+    const inside = polyPoint(vertices, rx, ry)
+    if (inside) return true
+  }
+
+  return false
+}
+
+function lineRect(x1: number, y1: number, x2: number, y2: number, rx: number, ry: number, rw: number, rh: number): boolean {
+  const left =   lineLine(x1, y1, x2, y2, rx, ry, rx, ry+rh)
+  const right =  lineLine(x1, y1, x2, y2, rx+rw, ry, rx+rw, ry+rh)
+  const top =    lineLine(x1, y1, x2, y2, rx, ry, rx+rw, ry)
+  const bottom = lineLine(x1, y1, x2, y2, rx, ry+rh, rx+rw, ry+rh)
+  return left || right || top || bottom
+}
+
+function lineLine(x1: number, y1: number, x2: number, y2: number, x3: number, y3: number, x4: number, y4: number): boolean {
+  const uA = ((x4-x3)*(y1-y3) - (y4-y3)*(x1-x3)) / ((y4-y3)*(x2-x1) - (x4-x3)*(y2-y1))
+  const uB = ((x2-x1)*(y1-y3) - (y2-y1)*(x1-x3)) / ((y4-y3)*(x2-x1) - (x4-x3)*(y2-y1))
+  return uA >= 0 && uA <= 1 && uB >= 0 && uB <= 1
+}
+
+function polyPoint(vertices: XYZ[], px: number, py: number): boolean {
+  let collision = false
+  for (let current=0, next=1; current<vertices.length; current++, next++) {
+    if (next === vertices.length) next = 0
+    const vc = vertices[current]
+    const vn = vertices[next]
+    if (((vc.y > py && vn.y < py) || (vc.y < py && vn.y > py)) &&
+        (px < (vn.x-vc.x)*(py-vc.y) / (vn.y-vc.y)+vc.x)) {
+      collision = !collision
+    }
+  }
+  return collision
+}
 
 // glory to https://github.com/pgkelley4/line-segments-intersect/blob/master/js/line-segments-intersect.js
 // not box, segment
