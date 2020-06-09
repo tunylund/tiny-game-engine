@@ -1,10 +1,11 @@
 import { Entity } from './entity'
 import { position } from './position'
 import { xyz, XYZ, sub, cross, equal, mul, negone, one, add, dot } from './xyz'
+import { Polygon } from './polygon'
 
 // glory to http://www.jeffreythompson.org/collision-detection
 
-export function entityCollidesWithPolygon2d(entity: Entity, polygon: XYZ[]) {
+export function entityCollidesWithPolygon2d(entity: Entity, polygon: Polygon) {
   const entityPoly = [
     xyz(entity.pos.cor.x - entity.dim.x2, entity.pos.cor.y - entity.dim.y2),
     xyz(entity.pos.cor.x + entity.dim.x2, entity.pos.cor.y - entity.dim.y2),
@@ -18,7 +19,7 @@ export function entityCollidesWithPolygon2d(entity: Entity, polygon: XYZ[]) {
   return polyPoly(polygon, entityPoly)
 }
 
-function polyPoly(p1: XYZ[], p2: XYZ[]): boolean {
+function polyPoly(p1: Polygon, p2: Polygon): boolean {
   if (p1.length < 2 || p2.length < 1) return false
   for (let current=0, next=1; current<p1.length; current++, next++) {
     if (next === p1.length) next = 0
@@ -34,7 +35,7 @@ function polyPoly(p1: XYZ[], p2: XYZ[]): boolean {
   return false
 }
 
-function polyLine(vertices: XYZ[], x1: number, y1: number, x2: number, y2: number): boolean {
+function polyLine(vertices: Polygon, x1: number, y1: number, x2: number, y2: number): boolean {
   for (let current=0, next=1; current<vertices.length; current++, next++) {
     if (next === vertices.length) next = 0
     const x3 = vertices[current].x
@@ -48,7 +49,7 @@ function polyLine(vertices: XYZ[], x1: number, y1: number, x2: number, y2: numbe
   return false
 }
 
-function polyRect(vertices: XYZ[], rx: number, ry: number, rw: number, rh: number): boolean {
+function polyRect(vertices: Polygon, rx: number, ry: number, rw: number, rh: number): boolean {
   for (let current=0, next=1; current<vertices.length; current++, next++) {
     if (next === vertices.length) next = 0
     const vc = vertices[current]
@@ -76,7 +77,7 @@ function lineLine(x1: number, y1: number, x2: number, y2: number, x3: number, y3
   return uA >= 0 && uA <= 1 && uB >= 0 && uB <= 1
 }
 
-function polyPoint(vertices: XYZ[], px: number, py: number): boolean {
+function polyPoint(vertices: Polygon, px: number, py: number): boolean {
   let collision = false
   for (let current=0, next=1; current<vertices.length; current++, next++) {
     if (next === vertices.length) next = 0
