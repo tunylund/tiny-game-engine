@@ -7,6 +7,15 @@ export function imageToPolygon(imageData: Uint8ClampedArray, width: number, heig
   return rayCastPolygon({data: imageData, width, height}, accuracy)
 }
 
+export function rect(cor: XYZ, dim: XYZ): Polygon {
+  return [
+    xyz(cor.x - dim.x2, cor.y - dim.y2),
+    xyz(cor.x + dim.x2, cor.y - dim.y2),
+    xyz(cor.x + dim.x2, cor.y + dim.y2),
+    xyz(cor.x - dim.x2, cor.y + dim.y2)
+  ]
+}
+
 function alphaAt(imageData: ImageData, point: {x: number, y: number}): number {
   return imageData.data[point.x * 4 + point.y * imageData.width * 4 + 3]
 }
