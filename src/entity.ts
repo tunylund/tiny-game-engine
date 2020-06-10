@@ -1,6 +1,7 @@
 import { intersects } from './collision'
 import { position, Position } from './position'
 import { vector, xyz, XYZ, sub } from './xyz'
+import { Polygon } from './polygon'
 
 interface Entity {
   pos: Position
@@ -18,6 +19,18 @@ function entity<T extends Entity>(pos: Entity|Position = position(), dim = xyz()
       dir: xyz(pos.dir)
     } as T, rest)
   }
+}
+
+export function collisionRect(ent: Entity): Polygon {
+  return [
+    xyz(- ent.dim.x2, - ent.dim.y2),
+    xyz(+ ent.dim.x2, - ent.dim.y2),
+    xyz(+ ent.dim.x2, + ent.dim.y2),
+    xyz(- ent.dim.x2, + ent.dim.y2)
+  ].map(({x, y}) => xyz(
+    ent.pos.cor.x + x * Math.cos(ent.dir.radian) - y * Math.sin(ent.dir.radian),
+    ent.pos.cor.y + x * Math.sin(ent.dir.radian) + y * Math.cos(ent.dir.radian)
+  ))
 }
 
 function vectorTo(from: Entity, to: Entity, size = distance(from, to)) {

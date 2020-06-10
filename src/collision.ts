@@ -1,4 +1,4 @@
-import { Entity } from './entity'
+import { Entity, collisionRect } from './entity'
 import { position } from './position'
 import { xyz, XYZ, sub, cross, equal, mul, negone, one, add, dot } from './xyz'
 import { Polygon } from './polygon'
@@ -6,16 +6,7 @@ import { Polygon } from './polygon'
 // glory to http://www.jeffreythompson.org/collision-detection
 
 export function entityCollidesWithPolygon2d(entity: Entity, polygon: Polygon) {
-  const entityPoly = [
-    xyz(entity.pos.cor.x - entity.dim.x2, entity.pos.cor.y - entity.dim.y2),
-    xyz(entity.pos.cor.x + entity.dim.x2, entity.pos.cor.y - entity.dim.y2),
-    xyz(entity.pos.cor.x + entity.dim.x2, entity.pos.cor.y + entity.dim.y2),
-    xyz(entity.pos.cor.x - entity.dim.x2, entity.pos.cor.y + entity.dim.y2)
-  ].map(({x, y}) => xyz(
-    x * Math.cos(entity.dir.radian) - y * Math.sin(entity.dir.radian),
-    x * Math.sin(entity.dir.radian) + y * Math.cos(entity.dir.radian)
-  ))
-
+  const entityPoly = collisionRect(entity)
   return polyPoly(polygon, entityPoly)
 }
 
