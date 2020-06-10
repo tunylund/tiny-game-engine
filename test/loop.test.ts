@@ -1,15 +1,35 @@
 import { loop } from '../src/loop'
-import jsdom from 'jsdom'
-
-const window = (new jsdom.JSDOM('', { pretendToBeVisual: true })).window as unknown as Window
 
 describe('loop', () => {
+  const timers = {
+    requestAnimationFrame: setImmediate,
+    cancelAnimationFrame: clearImmediate
+  }
+
   it('should loop', (done) => {
     const stop = loop((step, total) => {
       stop()
-      expect(step).toBeGreaterThan(0)
-      expect(total).toBeGreaterThan(0)
+      expect(step).toBeGreaterThanOrEqual(0)
+      expect(total).toBeGreaterThanOrEqual(0)
       done()
-    }, window)
+    }, timers)
+  })
+
+  it('should loop async steps', (done) => {
+    let count = 0
+    const stop = loop((step, total) => {
+      count++
+      return new Promise((resolve) => setTimeout(() => {
+        resolve()
+        stop()
+        done()
+      }, 10))
+    }, {
+      requestAnimationFrame: (cb) => {
+        expect(count).toBe(0)
+        return setImmediate(cb)
+      },
+      cancelAnimationFrame: clearImmediate
+    })
   })
 })
