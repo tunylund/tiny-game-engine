@@ -1,4 +1,4 @@
-import { intersects } from './collision'
+import { polygonCollidesWithPoint, Circle } from './collision'
 import { position, Position } from './position'
 import { vector, xyz, XYZ, sub } from './xyz'
 import { Polygon } from './polygon'
@@ -33,6 +33,13 @@ export function collisionRect(ent: Entity): Polygon {
   ))
 }
 
+export function collisionCircle(ent: Entity): Circle {
+  return {
+    cor: ent.pos.cor,
+    r: ent.dim.size/2
+  }
+}
+
 function vectorTo(from: Entity, to: Entity, size = distance(from, to)) {
   return vector(sub(to.pos.cor, from.pos.cor).radian, size)
 }
@@ -48,9 +55,8 @@ function distance(a: Entity, b: Entity) {
   return sub(a.pos.cor, b.pos.cor).size
 }
 
-function isAt(a: Entity, cor: XYZ, precision: number|XYZ = 0.1) {
-  const dim = typeof precision === 'number' ? xyz(precision, precision, precision) : precision
-  return intersects(a, entity(position(cor), dim))
+function isAt(a: Entity, cor: XYZ) {
+  return polygonCollidesWithPoint(collisionRect(a), cor)
 }
 
 export { Entity, entity, nearest, isAt, distance, vectorTo }

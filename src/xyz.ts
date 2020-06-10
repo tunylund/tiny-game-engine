@@ -13,7 +13,9 @@ interface XYZ {
   readonly unit: XYZ
 }
 
-export function cross(a: XYZ, v: XYZ) { return xyz(a.y * v.z - a.z * v.y, a.x * v.z - a.z * v.x, a.x * v.y - a.y * v.x)}
+export function cross(a: XYZ, v: XYZ) { return xyz(a.y * v.z - a.z * v.y,
+                                                   a.x * v.z - a.z * v.x,
+                                                   a.x * v.y - a.y * v.x)}
 export function dot(a: XYZ, v: XYZ) { return mul(a, v).sum }
 export function add(a: XYZ, v: XYZ) { return xyz(a.x + v.x, a.y + v.y, a.z + v.z) }
 export function sub(a: XYZ, v: XYZ) { return xyz(a.x - v.x, a.y - v.y, a.z - v.z) }

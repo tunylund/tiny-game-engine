@@ -21,7 +21,7 @@ describe('entity', () => {
 
   it('should know where it is at', () => {
     expect(isAt(a, xyz(0, 0, 0))).toBeTruthy()
-    expect(isAt(a, xyz(1, 1, 1), 2)).toBeTruthy()
-    expect(isAt(a, xyz(1, 1, 1), 1)).toBeFalsy()
+    expect(isAt(a, xyz(0.49, 0.49, 0.49))).toBeTruthy()
+    expect(isAt(a, xyz(0.5, 0.5, 0.5))).toBeFalsy()
   })
 })
