@@ -6,30 +6,23 @@ describe('loop', () => {
     cancelAnimationFrame: clearImmediate
   }
 
-  it('should loop', (done) => {
+  it('should loop once', (done) => {
     const stop = loop((step, total) => {
-      stop()
       expect(step).toBeGreaterThanOrEqual(0)
       expect(total).toBeGreaterThanOrEqual(0)
+      stop()
       done()
     }, timers)
   })
 
-  it('should loop async steps', (done) => {
+  it('should loop twice', (done) => {
     let count = 0
     const stop = loop((step, total) => {
       count++
-      return new Promise((resolve) => setTimeout(() => {
-        resolve()
+      if (count === 1) {
         stop()
         done()
-      }, 10))
-    }, {
-      requestAnimationFrame: (cb) => {
-        expect(count).toBe(0)
-        return setImmediate(cb)
-      },
-      cancelAnimationFrame: clearImmediate
-    })
+      }
+    }, timers)
   })
 })

@@ -14,11 +14,11 @@ export function loop(fn: (stepDuration: number, gameDuration: number) => void, w
   let previousStepTime = start
   let frmToken = raf(step)
 
-  async function step() {
+  function step() {
     const now = Date.now()
     const stepDuration = Math.min(now - previousStepTime, maxStepDiff) / 1000
     const gameDuration = now - start
-    await fn(stepDuration, gameDuration)
+    fn(stepDuration, gameDuration)
     previousStepTime = now
     if (frmToken !== STOP) { frmToken = raf(step) }
   }
