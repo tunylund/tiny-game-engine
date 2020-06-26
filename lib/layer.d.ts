@@ -7,7 +7,7 @@ export interface Layer {
     h: number;
 }
 export declare function buildLayer(w: number, h: number, win?: Window): Layer;
-export declare function asLayer(img: ImageBitmap | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement): Layer;
+export declare function asLayer(img: ImageBitmap | HTMLImageElement | HTMLCanvasElement): Layer;
 export declare function getData({ context, canvas }: Layer): ImageData;
 export declare function getRow(y: number, { context, canvas }: Layer): ImageData;
 export declare function getCol(x: number, { context, canvas }: Layer): ImageData;

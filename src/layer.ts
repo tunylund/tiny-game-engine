@@ -20,7 +20,7 @@ export function buildLayer(w: number, h: number, win?: Window): Layer {
   return layer
 }
 
-export function asLayer(img: ImageBitmap|HTMLImageElement|HTMLCanvasElement|HTMLVideoElement): Layer {
+export function asLayer(img: ImageBitmap|HTMLImageElement|HTMLCanvasElement): Layer {
   const layer = buildLayer(img.width, img.height)
   layer.context.drawImage(img, 0, 0)
   return layer
