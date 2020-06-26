@@ -20,7 +20,7 @@ export function buildLayer(w: number, h: number, win?: Window): Layer {
   return layer
 }
 
-export function asLayer(img: ImageBitmap|HTMLImageElement|HTMLCanvasElement): Layer {
+export function asLayer(img: ImageBitmap|HTMLImageElement|HTMLCanvasElement|HTMLVideoElement): Layer {
   const layer = buildLayer(img.width, img.height)
   layer.context.drawImage(img, 0, 0)
   return layer
@@ -52,7 +52,7 @@ export function colorAt(i: number, data: Uint8ClampedArray): Uint8ClampedArray {
   return Uint8ClampedArray.of(data[i * 4 + 0], data[i * 4 + 1], data[i * 4 + 2], data[i * 4 + 3])
 }
 
-export function setColor(i: number, color: number[], data: Uint8ClampedArray) {
+export function setColor(i: number, color: Uint8ClampedArray|number[], data: Uint8ClampedArray) {
   data[i + 0] = color[0]
   data[i + 1] = color[1]
   data[i + 2] = color[2]
@@ -89,19 +89,19 @@ export function cut(x: number, y: number, w: number, h: number, src: Layer): Lay
   return layer
 }
 
-export function scale(img: HTMLCanvasElement|ImageBitmap|HTMLImageElement, size: {w: number, h: number}): Layer {
-  const layer = buildLayer(size.w, size.h)
+export function scale(img: HTMLCanvasElement|ImageBitmap|HTMLImageElement, width: number, height: number): Layer {
+  const layer = buildLayer(width, height)
   layer.context.drawImage(img, 0, 0, img.width, img.height, 0, 0, layer.canvas.width, layer.canvas.height)
   return layer
 }
 
-export function fitSize(img: ImageBitmap|HTMLImageElement, maxSize: {w: number, h: number}): Layer {
-  if (img.width > maxSize.w) {
-    const sc = maxSize.w / img.width
-    return scale(img, {w: img.width * sc, h: img.height * sc})
-  } else if (img.height > maxSize.h) {
-    const sc = maxSize.h / img.height
-    return scale(img, {w: img.width * sc, h: img.height * sc})
+export function fitSize(img: ImageBitmap|HTMLImageElement, width: number, height: number): Layer {
+  if (img.width > width) {
+    const sc = width / img.width
+    return scale(img, img.width * sc, img.height * sc)
+  } else if (img.height > height) {
+    const sc = height / img.height
+    return scale(img, img.width * sc, img.height * sc)
   } else {
     return asLayer(img)
   }
