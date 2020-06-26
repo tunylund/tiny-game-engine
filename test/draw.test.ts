@@ -1,6 +1,5 @@
-import { draw, isometricDraw, stopDrawLoop, drawImage } from '../src/draw'
+import { draw, isometricDraw, stopDrawLoop } from '../src/draw'
 import jsdom from 'jsdom'
-import { position } from '../src/position'
 import { xyz } from '../src/xyz'
 
 function prepare() {

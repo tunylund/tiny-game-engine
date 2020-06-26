@@ -1,6 +1,6 @@
 import { loop } from './loop'
-import { Position, position } from './position'
 import { XYZ, zero, xyz } from './xyz'
+import { Layer, buildLayer } from './layer'
 
 type Drawing = (ctx: CanvasRenderingContext2D) => void
 type Draw = (ctx: CanvasRenderingContext2D, cw: number, ch: number) => void
@@ -8,7 +8,6 @@ type Draw = (ctx: CanvasRenderingContext2D, cw: number, ch: number) => void
 function setup(window: Window) {
   const layer = drawingLayer(window)
   window.document.body.appendChild(layer.canvas)
-  const i = 0
   const stopThisDrawLoop = loop(() => drawStep(layer), window)
 
   return () => {
@@ -21,13 +20,6 @@ interface Drawable {
   z: number,
   draw: Draw,
   layer?: Layer
-}
-
-interface Layer {
-  canvas: HTMLCanvasElement,
-  context: CanvasRenderingContext2D,
-  cw: number,
-  ch: number
 }
 
 const drawables: Drawable[] = []
@@ -56,21 +48,9 @@ function addDrawable(z: number, drawFn: Draw, win: Window, layer?: Layer) {
   drawables.splice(ix + 1, 0, { z, draw: drawFn, layer })
 }
 
-function fixedSizeDrawingLayer(w: number, h: number, win?: Window): Layer {
-  const canvas = (win || window).document.createElement('canvas')
-  const layer = {
-    cw: 0, ch: 0, canvas,
-    context: canvas.getContext('2d') as CanvasRenderingContext2D,
-  }
-  canvas.width = w
-  canvas.height = h
-  layer.cw = canvas.width / 2
-  layer.ch = canvas.height / 2
-  return layer
-}
 function drawingLayer(win?: Window): Layer {
   const w = win || window
-  const layer = fixedSizeDrawingLayer(w.innerWidth, w.innerHeight, win)
+  const layer = buildLayer(w.innerWidth, w.innerHeight, win)
   w.addEventListener('resize', () => {
     layer.canvas.width = w.innerWidth
     layer.canvas.height = w.innerHeight
@@ -114,4 +94,4 @@ function isometricDraw(
   }, offset, undefined, (win || window))
 }
 
-export { draw, drawImage, drawingLayer, fixedSizeDrawingLayer, isometricDraw, stopDrawLoop, Draw, Layer }
+export { draw, drawImage, drawingLayer, isometricDraw, stopDrawLoop, Draw }
