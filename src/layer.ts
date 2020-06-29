@@ -39,7 +39,7 @@ export function getCol(x: number, {context, canvas}: Layer): ImageData {
 }
 
 export function forEachColor(data: Uint8ClampedArray, cb: (c: Uint8ClampedArray, ix: number) => void) {
-  for(let i=0; i<data.length; i++) cb(colorAt(i, data), i)
+  for(let i=0; i<data.length/4; i++) cb(colorAt(i, data), i)
 }
 
 export function amountOfColor(data: Uint8ClampedArray) {
@@ -53,10 +53,10 @@ export function colorAt(i: number, data: Uint8ClampedArray): Uint8ClampedArray {
 }
 
 export function setColor(i: number, color: Uint8ClampedArray|number[], data: Uint8ClampedArray) {
-  data[i + 0] = color[0]
-  data[i + 1] = color[1]
-  data[i + 2] = color[2]
-  data[i + 3] = color[3]
+  data[i * 4 + 0] = color[0]
+  data[i * 4 + 1] = color[1]
+  data[i * 4 + 2] = color[2]
+  data[i * 4 + 3] = color[3]
 }
 
 export function hasColor(data: ImageData, requiredPercentage?: number) {
