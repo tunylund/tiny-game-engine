@@ -39,21 +39,15 @@ export function getCol(x: number, {context, canvas}: Layer): ImageData {
 }
 
 export function amountOfColor(data: Uint8ClampedArray) {
-  return colors(data).filter(c => c[3] > 0).length
-}
-
-export function colors(data: Uint8ClampedArray): Uint8ClampedArray[] {
-  const result = []
-  for(let i=0; i<data.length/4; i++) result.push(colorAt(i, data))
+  let result = 0
+  for(let i=0; i<data.length/4; i++) {
+    if (data[i * 4 + 3] > 0) result++
+  }
   return result
 }
 
 export function colorAt(colorIx: number, data: Uint8ClampedArray): Uint8ClampedArray {
-  return Uint8ClampedArray.of(
-    data[colorIx * 4 + 0],
-    data[colorIx * 4 + 1],
-    data[colorIx * 4 + 2],
-    data[colorIx * 4 + 3])
+  return data.subarray(colorIx * 4, colorIx * 4 + 4)
 }
 
 export function setColor(color: Uint8ClampedArray|number[], colorIx: number, data: Uint8ClampedArray) {
