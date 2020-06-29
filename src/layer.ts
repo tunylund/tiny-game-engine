@@ -38,25 +38,29 @@ export function getCol(x: number, {context, canvas}: Layer): ImageData {
   return context.getImageData(x, 0, 1, canvas.height)
 }
 
-export function forEachColor(data: Uint8ClampedArray, cb: (c: Uint8ClampedArray, ix: number) => void) {
-  for(let i=0; i<data.length/4; i++) cb(colorAt(i, data), i)
-}
-
 export function amountOfColor(data: Uint8ClampedArray) {
-  let found = 0
-  forEachColor(data, c => c[3] > 0 ? found++ : null)
-  return found
+  return colors(data).filter(c => c[3] > 0).length
 }
 
-export function colorAt(i: number, data: Uint8ClampedArray): Uint8ClampedArray {
-  return Uint8ClampedArray.of(data[i * 4 + 0], data[i * 4 + 1], data[i * 4 + 2], data[i * 4 + 3])
+export function colors(data: Uint8ClampedArray): Uint8ClampedArray[] {
+  const result = []
+  for(let i=0; i<data.length/4; i++) result.push(colorAt(i, data))
+  return result
 }
 
-export function setColor(i: number, color: Uint8ClampedArray|number[], data: Uint8ClampedArray) {
-  data[i * 4 + 0] = color[0]
-  data[i * 4 + 1] = color[1]
-  data[i * 4 + 2] = color[2]
-  data[i * 4 + 3] = color[3]
+export function colorAt(colorIx: number, data: Uint8ClampedArray): Uint8ClampedArray {
+  return Uint8ClampedArray.of(
+    data[colorIx * 4 + 0],
+    data[colorIx * 4 + 1],
+    data[colorIx * 4 + 2],
+    data[colorIx * 4 + 3])
+}
+
+export function setColor(color: Uint8ClampedArray|number[], colorIx: number, data: Uint8ClampedArray) {
+  data[colorIx * 4 + 0] = color[0]
+  data[colorIx * 4 + 1] = color[1]
+  data[colorIx * 4 + 2] = color[2]
+  data[colorIx * 4 + 3] = color[3]
 }
 
 export function hasColor(data: ImageData, requiredPercentage?: number) {

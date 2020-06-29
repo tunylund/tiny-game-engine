@@ -11,10 +11,10 @@ export declare function asLayer(img: ImageBitmap | HTMLImageElement | HTMLCanvas
 export declare function getData({ context, canvas }: Layer): ImageData;
 export declare function getRow(y: number, { context, canvas }: Layer): ImageData;
 export declare function getCol(x: number, { context, canvas }: Layer): ImageData;
-export declare function forEachColor(data: Uint8ClampedArray, cb: (c: Uint8ClampedArray, ix: number) => void): void;
 export declare function amountOfColor(data: Uint8ClampedArray): number;
-export declare function colorAt(i: number, data: Uint8ClampedArray): Uint8ClampedArray;
-export declare function setColor(i: number, color: Uint8ClampedArray | number[], data: Uint8ClampedArray): void;
+export declare function colors(data: Uint8ClampedArray): Uint8ClampedArray[];
+export declare function colorAt(colorIx: number, data: Uint8ClampedArray): Uint8ClampedArray;
+export declare function setColor(color: Uint8ClampedArray | number[], colorIx: number, data: Uint8ClampedArray): void;
 export declare function hasColor(data: ImageData, requiredPercentage?: number): boolean;
 export declare function resizeCanvas(layer: Layer, width: number, height: number): Layer;
 export declare function cropToEdges(layer: Layer): Layer;
