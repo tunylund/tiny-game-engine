@@ -30,7 +30,7 @@ export function sequence(seq: any[], duration: number, loopOver: boolean): Seque
     age += step
     ix = linear(0, lastIx, duration, 1, age)
     s.value = seq[ix]
-    if (ix === lastIx) {
+    if (ix === lastIx || age > duration) {
       if (loopOver) age = 0
       else s.finished = true
     }

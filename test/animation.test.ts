@@ -35,7 +35,7 @@ describe('animation', () => {
       seq.step(1000)
       expect(seq.value).toEqual(2)
     })
-    it('should loop', () => {
+    it('should loop when end of sequence is reached', () => {
       const seq = sequence([1,2,3], 3000, true)
       seq.step(3000)
       seq.step(1000)
