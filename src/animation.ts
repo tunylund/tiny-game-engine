@@ -5,13 +5,16 @@ export function linear(
   precision: number,
   age: number) {
   if (duration === 0) return targetValue
-  const range = targetValue - initialValue
-  const valuePerStep = range / duration
+  const range = Math.abs(targetValue - initialValue)
+  const dir = targetValue > initialValue ? 1 : -1
+  const valuePerStep = range / duration * dir
   const rawValue = initialValue + valuePerStep * age
   const v = Math.floor(rawValue * 10000),
         p = Math.floor(precision * 10000)
   const rounded = (v - v % p) / 10000
-  return rounded > targetValue ? targetValue : rounded
+  return dir > 0 && rounded > targetValue ? targetValue :
+         dir < 0 && rounded < targetValue ? targetValue :
+         rounded
 }
 
 export interface Sequence {

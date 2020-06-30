@@ -20,6 +20,9 @@ describe('animation', () => {
     it('should floor to defined precision', () => {
       expect(linear(0, 3, 3000, 1, 1100)).toEqual(1)
     })
+    it('should work backwards', () => {
+      expect(linear(3, 0, 3000, 1, 2000)).toEqual(1)
+    })
   })
   describe('sequence', () => {
     it('should set first value', () => {
