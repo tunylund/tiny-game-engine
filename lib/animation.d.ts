@@ -1,10 +1,10 @@
 export declare function linear(initialValue: number, targetValue: number, duration: number, precision: number, age: number): number;
 export interface Sequence {
-    value: number;
+    value: any;
     finished: boolean;
     step: (step: number) => void;
 }
-export declare function sequence(seq: number[], duration: number, loopOver: boolean): Sequence;
+export declare function sequence(seq: any[], duration: number, loopOver: boolean): Sequence;
 export interface FrameSequence {
     x: number;
     y: number;

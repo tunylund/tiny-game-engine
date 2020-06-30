@@ -18,11 +18,11 @@ export function linear(
 }
 
 export interface Sequence {
-  value: number
+  value: any
   finished: boolean
   step: (step: number) => void
 }
-export function sequence(seq: number[], duration: number, loopOver: boolean): Sequence {
+export function sequence(seq: any[], duration: number, loopOver: boolean): Sequence {
   const lastIx = seq.length - 1
   let age = 0, ix = 0
   const s = { value: seq[0], step: stepFn, finished: false }
