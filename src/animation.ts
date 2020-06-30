@@ -20,18 +20,19 @@ export function linear(
 export interface Sequence {
   value: any
   finished: boolean
+  age: number
   step: (step: number) => void
 }
 export function sequence(seq: any[], duration: number, loopOver: boolean): Sequence {
   const lastIx = seq.length - 1
-  let age = 0, ix = 0
-  const s = { value: seq[0], step: stepFn, finished: false }
+  let ix = 0
+  const s = { value: seq[0], step: stepFn, finished: false, age: 0 }
   function stepFn(step: number) {
-    age += step
-    ix = linear(0, lastIx, duration, 1, age)
+    s.age += step
+    ix = linear(0, lastIx, duration, 1, s.age)
     s.value = seq[ix]
-    if (ix === lastIx || age > duration) {
-      if (loopOver) age = 0
+    if (ix === lastIx || s.age > duration) {
+      if (loopOver) s.age = 0
       else s.finished = true
     }
   }

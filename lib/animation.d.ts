@@ -2,6 +2,7 @@ export declare function linear(initialValue: number, targetValue: number, durati
 export interface Sequence {
     value: any;
     finished: boolean;
+    age: number;
     step: (step: number) => void;
 }
 export declare function sequence(seq: any[], duration: number, loopOver: boolean): Sequence;
