@@ -2,7 +2,6 @@ import { loop } from './loop'
 import { XYZ, zero, xyz } from './xyz'
 import { Layer, buildLayer } from './layer'
 
-type Drawing = (ctx: CanvasRenderingContext2D) => void
 type Draw = (ctx: CanvasRenderingContext2D, cw: number, ch: number) => void
 
 function setup(window: Window) {
@@ -61,7 +60,7 @@ function drawingLayer(win?: Window): Layer {
 }
 
 function draw(
-  drawFn: Draw|Drawing,
+  drawFn: Draw,
   offset: XYZ = zero,
   layer?: Layer,
   win?: Window) {
