@@ -16,7 +16,7 @@ export function loop(fn: (stepDuration: number, gameDuration: number) => void, w
 
   function step() {
     const now = Date.now()
-    const stepDuration = Math.min(now - previousStepTime, maxStepDiff) / 1000
+    const stepDuration = Math.min(now - previousStepTime, maxStepDiff)
     const gameDuration = now - start
     fn(stepDuration, gameDuration)
     previousStepTime = now
