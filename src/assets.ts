@@ -12,17 +12,20 @@ function loadImage(url: string): Promise<HTMLImageElement> {
 }
 
 let audioCtx: AudioContext
-export type AudioBuilder = () => AudioBufferSourceNode
+export type AudioBuilder = (volume: number) => AudioBufferSourceNode
 function loadSound(url: string): Promise<AudioBuilder> {
   audioCtx = audioCtx || new AudioContext()
   return fetch(url)
     .then(response => response.arrayBuffer())
     .then(buffer => audioCtx.decodeAudioData(buffer))
     .then(audioBuffer => {
-      return () => {
+      return (volume) => {
         const source = audioCtx.createBufferSource()
+        const gainNode = audioCtx.createGain()
+        gainNode.gain.setValueAtTime(volume, 0)
         source.buffer = audioBuffer
-        source.connect(audioCtx.destination)
+        source.connect(gainNode)
+        gainNode.connect(audioCtx.destination)
         return source
       }
     })

@@ -1,4 +1,4 @@
-export declare type AudioBuilder = () => AudioBufferSourceNode;
+export declare type AudioBuilder = (volume: number) => AudioBufferSourceNode;
 declare function preload(assetUrls: {
     [key: string]: string;
 }, onAssetReady: (ready: number, expected: number) => void): Promise<void[]>;
