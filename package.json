@@ -7,7 +7,7 @@
   },
   "description": "",
   "scripts": {
-    "prepare": "husky install",
+    "setup-husky": "husky install",
     "build": "./build.sh",
     "lint": "echo \"linting...\" && tslint --fix -p .",
     "test": "jest **/*.test.ts"
