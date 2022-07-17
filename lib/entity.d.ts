@@ -2,6 +2,7 @@ import { Circle } from './collision';
 import { Position } from './position';
 import { XYZ } from './xyz';
 import { Polygon } from './polygon';
+import { Layer } from './layer';
 interface Entity {
     pos: Position;
     dim: XYZ;
@@ -14,4 +15,5 @@ declare function vectorTo(from: Entity, to: Entity, size?: number): XYZ;
 declare function nearest<T extends Entity>(entities: T[], cor: XYZ): T | null;
 declare function distance(a: Entity, b: Entity): number;
 declare function isAt(a: Entity, cor: XYZ): boolean;
-export { Entity, entity, nearest, isAt, distance, vectorTo };
+declare function drawEntityLayer(el: Entity, layer: Layer): void;
+export { Entity, entity, nearest, isAt, distance, vectorTo, drawEntityLayer };

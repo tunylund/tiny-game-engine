@@ -2,6 +2,8 @@ import { polygonCollidesWithPoint, Circle } from './collision'
 import { position, Position } from './position'
 import { vector, xyz, XYZ, sub } from './xyz'
 import { Polygon } from './polygon'
+import { Layer } from './layer'
+import { draw } from './draw'
 
 interface Entity {
   pos: Position
@@ -59,4 +61,8 @@ function isAt(a: Entity, cor: XYZ) {
   return polygonCollidesWithPoint(collisionRect(a), cor)
 }
 
-export { Entity, entity, nearest, isAt, distance, vectorTo }
+function drawEntityLayer(el: Entity, layer: Layer) {
+  draw(ctx => ctx.drawImage(layer.canvas, el.pos.cor.x, el.pos.cor.y), el.dim)
+}
+
+export { Entity, entity, nearest, isAt, distance, vectorTo, drawEntityLayer }
