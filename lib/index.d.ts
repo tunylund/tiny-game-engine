@@ -10,3 +10,4 @@ export * from './collision';
 export * from './polygon';
 export * from './assets';
 export * from './layer';
+export * from './noise';
