@@ -9,6 +9,7 @@ interface XYZ {
     readonly angle: number;
     readonly size: number;
     readonly sum: number;
+    readonly absSum: number;
     readonly signature: XYZ;
     readonly unit: XYZ;
 }

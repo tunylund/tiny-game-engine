@@ -9,6 +9,7 @@ interface XYZ {
   readonly angle: number
   readonly size: number
   readonly sum: number
+  readonly absSum: number
   readonly signature: XYZ
   readonly unit: XYZ
 }
@@ -28,7 +29,8 @@ export function xyz(x: number|XYZ = 0, y = 0, z = 0): XYZ {
     const radian = (Math.atan2(y, x) + Math.PI * 2) % (Math.PI * 2)
     const angle = (radian * 180 / Math.PI + 360) % 360
     const size = Math.sqrt(x * x + y * y + z * z)
-    const sum = Math.abs(x) + Math.abs(y) + Math.abs(z)
+    const sum = x + y + z
+    const absSum = Math.abs(x) + Math.abs(y) + Math.abs(z)
     const signature = {
       x: x === 0 ? 1 : Math.abs(x) / x,
       y: y === 0 ? 1 : Math.abs(y) / y,
@@ -44,7 +46,7 @@ export function xyz(x: number|XYZ = 0, y = 0, z = 0): XYZ {
       x2: x / 2,
       y2: y / 2,
       z2: z / 2,
-      radian, angle, size, sum, signature, unit
+      radian, angle, size, sum, signature, unit, absSum
     }
   } else {
     return xyz(x.x, x.y, x.z)
