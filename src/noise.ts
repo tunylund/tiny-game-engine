@@ -1,4 +1,4 @@
-import { dot, vector, xyz, sub } from './xyz'
+import { dot, vector, xyz, XYZ, sub } from './xyz'
 
 function easing(x: number): number {
   return 3 * Math.pow(x, 2) - 2 * Math.pow(x, 3)
@@ -8,34 +8,34 @@ function interpolate(s: number, t: number, x: number): number {
   return s + easing(x) * (t - s)
 }
 
-export function* noise(): Generator<number, number, unknown> {
-  let x = 0.1
-  const y = 0.5
-  let grid = [
-    vector(Math.PI * 2 * Math.random(), 1),
-    vector(Math.PI * 2 * Math.random(), 1),
+export function perlin(): (cor: XYZ) => number {
+  const grid: XYZ[][] = []
+  return (cor: XYZ) => noise(cor, grid)
+}
+
+function noise(cor: XYZ, grid: XYZ[][]): number {
+  const x0 = Math.floor(cor.x)
+  const y0 = Math.floor(cor.y)
+  const x1 = x0 + 1
+  const y1 = y0 + 1
+
+  if (!grid[y0]) grid[y0] = [
     vector(Math.PI * 2 * Math.random(), 1),
     vector(Math.PI * 2 * Math.random(), 1)
   ]
 
-  while (true) {
-    const s = dot(grid[0], sub(xyz(x, y), xyz(0, 0)))
-    const t = dot(grid[0], sub(xyz(x, y), xyz(1, 0)))
-    const a = interpolate(s, t, x)
+  if (!grid[y1]) grid[y1] = [
+    vector(Math.PI * 2 * Math.random(), 1),
+    vector(Math.PI * 2 * Math.random(), 1)
+  ]
 
-    const u = dot(grid[2], sub(xyz(x, y), xyz(0, 1)))
-    const v = dot(grid[3], sub(xyz(x, y), xyz(1, 1)))
-    const b = interpolate(u, v, x)
+  const s = dot(grid[y0][x0], sub(cor, xyz(x0, y0)))
+  const t = dot(grid[y0][x1], sub(cor, xyz(x1, y0)))
+  const a = interpolate(s, t, cor.x - x0)
 
-    yield interpolate(a, b, y)
-    x += 0.1
-    if (x >= 1) {
-      x = 0.1
-      grid = [
-        grid[2], grid[3],
-        vector(Math.PI * 2 * Math.random(), 1),
-        vector(Math.PI * 2 * Math.random(), 1)
-      ]
-    }
-  }
+  const u = dot(grid[y1][x0], sub(cor, xyz(x0, y1)))
+  const v = dot(grid[y1][x1], sub(cor, xyz(x1, y1)))
+  const b = interpolate(u, v, cor.x - x0)
+
+  return interpolate(a, b, cor.y - y0)
 }

@@ -1,1 +1,2 @@
-export declare function noise(): Generator<number, number, unknown>;
+import { XYZ } from './xyz';
+export declare function perlin(): (cor: XYZ) => number;
