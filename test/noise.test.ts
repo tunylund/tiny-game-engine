@@ -32,6 +32,9 @@ describe('noise', () => {
   it('should generate values with first decimal as a significant digit', () => {
     expect(noise(xyz(0.1, 0.1)) * 10).toBeGreaterThan(1)
   })
+  it('should allow negative values', () => {
+    expect(noise(xyz(-0.1, -0.1)) * 10).toBeGreaterThan(1)
+  })
   it('should generate values that alternate within two significant digits', () => {
     const a = Math.floor(noise(xyz(0.1, 0.1)) * 100), b = Math.floor(noise(xyz(0.2, 0.2)) * 100)
     const diff = Math.abs(a - b)

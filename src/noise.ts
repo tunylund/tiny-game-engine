@@ -19,15 +19,13 @@ function noise(cor: XYZ, grid: XYZ[][]): number {
   const x1 = x0 + 1
   const y1 = y0 + 1
 
-  if (!grid[y0]) grid[y0] = [
-    vector(Math.PI * 2 * Math.random(), 1),
-    vector(Math.PI * 2 * Math.random(), 1)
-  ]
+  if (!grid[y0]) grid[y0] = []
+  if (!grid[y0][x0]) grid[y0][x0] = vector(Math.PI * 2 * Math.random(), 1)
+  if (!grid[y0][x1]) grid[y0][x1] = vector(Math.PI * 2 * Math.random(), 1)
 
-  if (!grid[y1]) grid[y1] = [
-    vector(Math.PI * 2 * Math.random(), 1),
-    vector(Math.PI * 2 * Math.random(), 1)
-  ]
+  if (!grid[y1]) grid[y1] = []
+  if (!grid[y1][x0]) grid[y1][x0] = vector(Math.PI * 2 * Math.random(), 1)
+  if (!grid[y1][x1]) grid[y1][x1] = vector(Math.PI * 2 * Math.random(), 1)
 
   const s = dot(grid[y0][x0], sub(cor, xyz(x0, y0)))
   const t = dot(grid[y0][x1], sub(cor, xyz(x1, y0)))
